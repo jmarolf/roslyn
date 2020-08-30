@@ -17,6 +17,7 @@
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
     <ToolsetPackagesDir>$(RepoRoot)build\ToolsetPackages\</ToolsetPackagesDir>
     <UseSharedCompilation>true</UseSharedCompilation>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 
     <Features>strict</Features>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
@@ -122,17 +123,17 @@
     Analyzers
   -->
   <ItemGroup Condition="'$(DotNetBuildFromSource)' != 'true'">
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="$(MicrosoftCodeAnalysisNetAnalyzersVersion)" PrivateAssets="all" />
-    <PackageReference Include="Roslyn.Diagnostics.Analyzers" Version="$(RoslynDiagnosticsAnalyzersVersion)" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="$(MicrosoftVisualStudioThreadingAnalyzersVersion)" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.PerformanceSensitiveAnalyzers" Version="$(MicrosoftCodeAnalysisPerformanceSensitiveAnalyzersVersion)" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" PrivateAssets="all" />
+    <PackageReference Include="Roslyn.Diagnostics.Analyzers" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.PerformanceSensitiveAnalyzers" PrivateAssets="all" />
   </ItemGroup>
 
   <!-- 
      Code indexing targets to help generating LSIF from indexing builds.
   -->
   <ItemGroup>
-    <PackageReference Include="RichCodeNav.EnvVarDump" Version="$(RichCodeNavEnvVarDumpVersion)" PrivateAssets="all" />
+    <PackageReference Include="RichCodeNav.EnvVarDump" PrivateAssets="all" />
   </ItemGroup>
 
   <!-- 
@@ -147,13 +148,13 @@
   <Choose>
     <When Condition="'$(Language)' == 'VB'">
       <ItemGroup Condition="'$(RoslynCheckCodeStyle)' == 'true'">
-        <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.CodeStyle" Version="$(MicrosoftCodeAnalysisVisualBasicCodeStyleVersion)" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.CodeStyle" PrivateAssets="all" />
       </ItemGroup>
     </When>
 
     <When Condition="'$(Language)' == 'C#'">
       <ItemGroup Condition="'$(RoslynCheckCodeStyle)' == 'true'">
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="$(MicrosoftCodeAnalysisCSharpCodeStyleVersion)" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" PrivateAssets="all" />
       </ItemGroup>
     </When>
   </Choose>

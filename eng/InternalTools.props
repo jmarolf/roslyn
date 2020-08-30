@@ -10,7 +10,7 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="Microsoft.DevDiv.Optimization.Data.PowerShell" Version="$(MicrosoftDevDivOptimizationDataPowerShellVersion)" ExcludeAssets="all" Condition="'$(UsingToolVisualStudioIbcTraining)' == 'true'"/>
+        <PackageReference Include="Microsoft.DevDiv.Optimization.Data.PowerShell" ExcludeAssets="all" Condition="'$(UsingToolVisualStudioIbcTraining)' == 'true'"/>
     </ItemGroup>
 
 </Project>

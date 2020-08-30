@@ -18,9 +18,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
-    <PackageReference Include="Microsoft.DotNet.VersionTools" Version="$(MicrosoftDotNetVersionToolsVersion)" />
-    <PackageReference Include="Mono.Options" Version="$(MonoOptionsVersion)" />
-    <PackageReference Include="NuGet.Packaging" Version="$(NuGetPackagingVersion)" />
+    <PackageReference Include="Microsoft.DotNet.VersionTools" />
+    <PackageReference Include="Mono.Options" />
+    <PackageReference Include="NuGet.Packaging" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
