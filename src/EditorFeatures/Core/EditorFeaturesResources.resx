@@ -948,4 +948,7 @@ Do you want to proceed?</value>
   <data name="User_Types_Records" xml:space="preserve">
     <value>User Types - Records</value>
   </data>
+  <data name="View_editorconfig_settings" xml:space="preserve">
+    <value>View editorconfig settings.</value>
+  </data>
 </root>

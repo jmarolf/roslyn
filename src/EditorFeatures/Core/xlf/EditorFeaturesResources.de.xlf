@@ -277,6 +277,11 @@
         <target state="translated">Zeichenfolge - ausführlich</target>
         <note />
       </trans-unit>
+      <trans-unit id="View_editorconfig_settings">
+        <source>View editorconfig settings.</source>
+        <target state="new">View editorconfig settings.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="Waiting_for_background_work_to_finish">
         <source>Waiting for background work to finish...</source>
         <target state="translated">Es wird auf den Abschluss von Hintergrundaufgaben gewartet...</target>

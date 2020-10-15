@@ -18,6 +18,10 @@ namespace Microsoft.VisualStudio.Editor.Implementation
         internal CommandBindingDefinition gotoImplementationCommandBinding;
 
         [Export]
+        [CommandBinding(Guids.RoslynGroupIdString, ID.RoslynCommands.ShowEditorConfigSettings, typeof(EditorConfigSettingsCommandArgs))]
+        internal CommandBindingDefinition showEditorConfigSettingsCommandBinding;
+
+        [Export]
         [CommandBinding(Guids.CSharpGroupIdString, ID.CSharpCommands.OrganizeSortUsings, typeof(SortImportsCommandArgs))]
         internal CommandBindingDefinition organizeSortCommandBinding;
 

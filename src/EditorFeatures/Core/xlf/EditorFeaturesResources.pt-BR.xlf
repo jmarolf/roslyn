@@ -277,6 +277,11 @@
         <target state="translated">Cadeia de caracteres - Textual</target>
         <note />
       </trans-unit>
+      <trans-unit id="View_editorconfig_settings">
+        <source>View editorconfig settings.</source>
+        <target state="new">View editorconfig settings.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="Waiting_for_background_work_to_finish">
         <source>Waiting for background work to finish...</source>
         <target state="translated">Aguardando a conclusão do trabalho em segundo plano...</target>

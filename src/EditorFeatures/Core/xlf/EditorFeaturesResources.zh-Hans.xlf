@@ -277,6 +277,11 @@
         <target state="translated">字符串 - 逐字字符串</target>
         <note />
       </trans-unit>
+      <trans-unit id="View_editorconfig_settings">
+        <source>View editorconfig settings.</source>
+        <target state="new">View editorconfig settings.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="Waiting_for_background_work_to_finish">
         <source>Waiting for background work to finish...</source>
         <target state="translated">正在等待后台工作完成...</target>
