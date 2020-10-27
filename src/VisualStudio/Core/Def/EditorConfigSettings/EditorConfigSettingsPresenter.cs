@@ -1,9 +1,12 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.Editor.Shared.Utilities;
@@ -30,7 +33,7 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
 
         public Task ShowAsync(IEditorConfigSettingsDataRepository dataRepository, CancellationToken token)
         {
-            var presenter = new EditorConfigSettingsPresenter(_threadingContext, _editorConfigSettingsWindowProvider, dataRepository, new CancellationTokenSource()));
+            var presenter = new EditorConfigSettingsPresenter(_threadingContext, _editorConfigSettingsWindowProvider, dataRepository, new CancellationTokenSource());
             return presenter.ShowAsync();
         }
     }
@@ -50,11 +53,11 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
         private bool _initialized;
         private readonly IThreadingContext _threadingContext;
         private readonly IEditorConfigSettingsWindowProvider _editorConfigSettingsWindowProvider;
-        private readonly EditorConfigSettingsDataRepository _dataRepository;
+        private readonly IEditorConfigSettingsDataRepository _dataRepository;
 
         public EditorConfigSettingsPresenter(IThreadingContext threadingContext,
                                              IEditorConfigSettingsWindowProvider editorConfigSettingsWindowProvider,
-                                             EditorConfigSettingsDataRepository dataRepository,
+                                             IEditorConfigSettingsDataRepository dataRepository,
                                              CancellationTokenSource cancellationSource)
         {
             _threadingContext = threadingContext;
