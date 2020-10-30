@@ -5,7 +5,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp.Completion.KeywordRecommenders;
 
 namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings
 {
@@ -24,6 +26,12 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings
         /// Never used by the mock class
         /// </summary>
         public event EventHandler<EventArgs>? SearchDismissed;
+
+        private readonly SemaphoreSlim _showSemaphore = new SemaphoreSlim(0, 1);
+        private readonly SemaphoreSlim _notifySemaphore = new SemaphoreSlim(0, 1);
+
+        public Task WaitForShowToBeCalled() => _showSemaphore.WaitAsync();
+        public Task WaitForNotifyToBeCalled() => _notifySemaphore.WaitAsync();
 
         internal int ShowCalled { get; private set; }
         internal IEditorConfigSettingsDataRepository? DataRepository { get; private set; }
@@ -47,13 +55,14 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings
 
             var results = DataRepository?.GetCurrentDataSnapshot();
             ResultCount = results?.Length ?? 0;
-
+            _notifySemaphore.Release();
             return Task.CompletedTask;
         }
 
         public Task ShowAsync()
         {
             ShowCalled++;
+            _showSemaphore.Release();
             return Task.CompletedTask;
         }
     }

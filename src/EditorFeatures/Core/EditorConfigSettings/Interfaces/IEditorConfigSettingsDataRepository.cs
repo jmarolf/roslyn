@@ -12,6 +12,5 @@ namespace Microsoft.CodeAnalysis.Editor
         void AddRange(ImmutableArray<EditorConfigSetting> results, IEnumerable<string>? additionalColumns = null);
         ImmutableArray<EditorConfigSetting> GetCurrentDataSnapshot();
         void RegisterPresenter(IEditorConfigSettingsPresenter presenter);
-
     }
 }
