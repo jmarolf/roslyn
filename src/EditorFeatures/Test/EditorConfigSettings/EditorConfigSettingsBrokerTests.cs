@@ -14,8 +14,7 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings
 {
     public class EditorConfigSettingsBrokerTests
     {
-        [Fact]
-        [UseExportProvider]
+        [Fact, UseExportProvider]
         public async Task TestShowSettingsAsyncNoResults()
         {
             // Create workspace services
@@ -41,8 +40,7 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings
             Assert.Equal(1, presenter.ShowCalled);
         }
 
-        [Fact]
-        [UseExportProvider]
+        [Fact, UseExportProvider]
         public async Task TestShowSettingsAsyncOneResults()
         {
             // Create workspace services
@@ -56,19 +54,19 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings
                     loader: TextLoader.From(TextAndVersion.Create(SourceText.From(""), VersionStamp.Create(), filePath)),
                     filePath: filePath);
             var document = workspace.AddDocument(documentInfo);
-            await broker.ShowEditorConfigSettingsAsync(document, default).ConfigureAwait(false);
+            await broker.ShowEditorConfigSettingsAsync(document, default);
             // Wait for settings to populate
 
             // verify that settings were populated
-            var presenter = await presenterProvider.GetPresenterAsync().ConfigureAwait(false);
-            await presenter.WaitForShowToBeCalled().ConfigureAwait(false);
+            var presenter = await presenterProvider.GetPresenterAsync();
+            await presenter.WaitForShowToBeCalled();
 
             Assert.Equal(0, presenter.ResultCount);
             Assert.False(presenter.HasSingleResult);
             Assert.Equal(1, presenter.ShowCalled);
 
             data.AddRange(ImmutableArray.Create(new EditorConfigSetting()));
-            await presenter.WaitForNotifyToBeCalled().ConfigureAwait(false);
+            await presenter.WaitForNotifyToBeCalled();
 
             Assert.Equal(1, presenter.ResultCount);
             Assert.True(presenter.HasSingleResult);
@@ -76,7 +74,7 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings
 
         }
 
-        private (IEditorConfigSettingsBroker, MockEditorConfigSettingsPresenterProvider, MockEditorConfigSettingsDataRepository) CreateBroker()
+        private static (IEditorConfigSettingsBroker, MockEditorConfigSettingsPresenterProvider, MockEditorConfigSettingsDataRepository) CreateBroker()
         {
             var presenterProvider = new MockEditorConfigSettingsPresenterProvider();
             var dataProvider = new MockEditorConfigSettingsDataRepositoryProvider();

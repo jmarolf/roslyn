@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.Editor
             var cancellationSource = CancellationTokenSource.CreateLinkedTokenSource(token);
             var dataRepository = _editorConfigSettingsDataRepositoryProvider.GetDataRepository(this);
             var presenter = _editorPresenationProvider;
-            Task.Run(async () => await presenter.ShowAsync(dataRepository, cancellationSource.Token).ConfigureAwait(false));
+            _ = presenter.ShowAsync(dataRepository, cancellationSource.Token);
         }
     }
 }
