@@ -7,7 +7,7 @@ using System.Collections.Immutable;
 
 namespace Microsoft.CodeAnalysis.Editor
 {
-    internal interface IEditorConfigSettingsDataRepository
+    internal interface IEditorConfigSettingsDataSource
     {
         void AddRange(ImmutableArray<EditorConfigSetting> results, IEnumerable<string>? additionalColumns = null);
         ImmutableArray<EditorConfigSetting> GetCurrentDataSnapshot();

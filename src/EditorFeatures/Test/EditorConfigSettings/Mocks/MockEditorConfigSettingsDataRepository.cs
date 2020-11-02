@@ -7,7 +7,7 @@ using System.Collections.Immutable;
 
 namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings.Mocks
 {
-    internal class MockEditorConfigSettingsDataRepository : IEditorConfigSettingsDataRepository
+    internal class MockEditorConfigSettingsDataSource : IEditorConfigSettingsDataSource
     {
         List<EditorConfigSetting> _settings = new List<EditorConfigSetting>();
         private IEditorConfigSettingsPresenter _presenter;

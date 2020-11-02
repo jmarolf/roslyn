@@ -13,7 +13,7 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings
 {
     internal class MockEditorConfigSettingsPresenter : IEditorConfigSettingsPresenter
     {
-        public MockEditorConfigSettingsPresenter(IEditorConfigSettingsDataRepository? dataRepository = null)
+        public MockEditorConfigSettingsPresenter(IEditorConfigSettingsDataSource? dataRepository = null)
         {
             ShowCalled = 0;
             NotifyOfUpdateCalled = 0;
@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings
         public Task WaitForNotifyToBeCalled() => _notifySemaphore.WaitAsync();
 
         internal int ShowCalled { get; private set; }
-        internal IEditorConfigSettingsDataRepository? DataRepository { get; private set; }
+        internal IEditorConfigSettingsDataSource? DataRepository { get; private set; }
         internal int NotifyOfUpdateCalled { get; private set; }
         internal int ResultCount { get; private set; }
         internal HashSet<string> AdditionalColumns { get; private set; } = new HashSet<string>();

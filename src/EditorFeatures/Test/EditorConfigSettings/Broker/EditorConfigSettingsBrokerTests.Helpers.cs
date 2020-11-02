@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings
 {
     public partial class EditorConfigSettingsBrokerTests
     {
-        private static (IEditorConfigSettingsBroker, MockEditorConfigSettingsPresenterProvider, MockEditorConfigSettingsDataRepository) CreateBroker()
+        private static (IEditorConfigSettingsBroker, MockEditorConfigSettingsPresenterProvider, MockEditorConfigSettingsDataSource) CreateBroker()
         {
             var presenterProvider = new MockEditorConfigSettingsPresenterProvider();
             var dataProvider = new MockEditorConfigSettingsDataRepositoryProvider();

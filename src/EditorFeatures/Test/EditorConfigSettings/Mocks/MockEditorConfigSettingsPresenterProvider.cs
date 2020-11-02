@@ -24,7 +24,7 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings.Mocks
             }
         }
 
-        public Task ShowAsync(IEditorConfigSettingsDataRepository dataRepository, CancellationToken token)
+        public Task ShowAsync(IEditorConfigSettingsDataSource dataRepository, CancellationToken token)
         {
             Presenter = new MockEditorConfigSettingsPresenter(dataRepository);
             dataRepository?.RegisterPresenter(Presenter);

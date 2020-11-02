@@ -6,8 +6,8 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings.Mocks
 {
     internal class MockEditorConfigSettingsDataRepositoryProvider : IEditorConfigSettingsDataRepositoryProvider
     {
-        internal MockEditorConfigSettingsDataRepository DataRepository { get; } = new MockEditorConfigSettingsDataRepository();
+        internal MockEditorConfigSettingsDataSource DataRepository { get; } = new MockEditorConfigSettingsDataSource();
 
-        public IEditorConfigSettingsDataRepository GetDataRepository(IEditorConfigSettingsBroker broker, string path) => DataRepository;
+        public IEditorConfigSettingsDataSource GetDataRepository(IEditorConfigSettingsBroker broker, string path) => DataRepository;
     }
 }

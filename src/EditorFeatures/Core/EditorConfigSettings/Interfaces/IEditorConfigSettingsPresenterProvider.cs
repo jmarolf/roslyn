@@ -9,6 +9,6 @@ namespace Microsoft.CodeAnalysis.Editor
 {
     internal interface IEditorConfigSettingsPresenterProvider
     {
-        Task ShowAsync(IEditorConfigSettingsDataRepository dataRepository, CancellationToken token);
+        Task ShowAsync(IEditorConfigSettingsDataSource dataRepository, CancellationToken token);
     }
 }
