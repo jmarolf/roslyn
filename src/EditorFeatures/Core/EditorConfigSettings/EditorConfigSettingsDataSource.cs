@@ -10,9 +10,8 @@ using System.Threading.Tasks;
 
 namespace Microsoft.CodeAnalysis.Editor
 {
-    internal class EditorConfigSettingsDataRepository : IEditorConfigSettingsDataRepository
+    internal class EditorConfigSettingsDataSource : IEditorConfigSettingsDataRepository
     {
-        private readonly EditorConfigSettingsBroker _editorConfigSettingsBroker;
         private IEditorConfigSettingsPresenter _presenter;
         private bool searchEnded = false;
 
@@ -21,9 +20,8 @@ namespace Microsoft.CodeAnalysis.Editor
 
         private readonly SortedDictionary<string, Dictionary<int, EditorConfigSetting>> _resultsPerOrigin;
 
-        public EditorConfigSettingsDataRepository(EditorConfigSettingsBroker editorConfigSettingsBroker)
+        public EditorConfigSettingsDataSource()
         {
-            _editorConfigSettingsBroker = editorConfigSettingsBroker ?? throw new ArgumentNullException(nameof(editorConfigSettingsBroker));
             _resultsPerOrigin = new SortedDictionary<string, Dictionary<int, EditorConfigSetting>>();
         }
 

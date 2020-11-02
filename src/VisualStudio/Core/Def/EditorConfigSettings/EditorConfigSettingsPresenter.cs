@@ -41,7 +41,7 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
     internal partial class EditorConfigSettingsPresenter : IEditorConfigSettingsPresenter, ITableDataSource
     {
         public string SourceTypeIdentifier => "EditorConfigSettings";
-        public string Identifier => ""; // TODO(jmarolf):: add resource
+        public string Identifier => ""; // TODO(jmarolf): add resource
         public string DisplayName => ""; // TODO(jmarolf): add resource
 
         public event EventHandler<EventArgs>? SearchDismissed;

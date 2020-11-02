@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.Editor
             if (document is null)
                 throw new ArgumentNullException(nameof(document));
             if (document.FilePath is null)
-                throw new ArgumentException($"Path for {document} must have a non-null path.");
+                throw new ArgumentException($"Path for {document} must have a non-null path."); // TODO(jmarolf): add resource
 
             _ = ShowEditorConfigSettingsAsync(document.FilePath, default);
         }
@@ -38,7 +38,7 @@ namespace Microsoft.CodeAnalysis.Editor
             if (project is null)
                 throw new ArgumentNullException(nameof(project));
             if (project.FilePath is null)
-                throw new ArgumentException($"Path for {project} must have a non-null path.");
+                throw new ArgumentException($"Path for {project} must have a non-null path."); // TODO(jmarolf): add resource
 
             _ = ShowEditorConfigSettingsAsync(project.FilePath, default);
         }
@@ -48,7 +48,7 @@ namespace Microsoft.CodeAnalysis.Editor
             if (solution is null)
                 throw new ArgumentNullException(nameof(solution));
             if (solution.FilePath is null)
-                throw new ArgumentException($"Path for {solution} must have a non-null path.");
+                throw new ArgumentException($"Path for {solution} must have a non-null path."); // TODO(jmarolf): add resource
 
             _ = ShowEditorConfigSettingsAsync(solution.FilePath, default);
         }
@@ -58,7 +58,7 @@ namespace Microsoft.CodeAnalysis.Editor
             if (project is null)
                 throw new ArgumentNullException(nameof(project));
             if (project.FilePath is null)
-                throw new ArgumentException($"Path for {project} must have a non-null path.");
+                throw new ArgumentException($"Path for {project} must have a non-null path."); // TODO(jmarolf): add resource
 
             return ShowEditorConfigSettingsAsync(project.FilePath, token);
         }
@@ -68,7 +68,7 @@ namespace Microsoft.CodeAnalysis.Editor
             if (solution is null)
                 throw new ArgumentNullException(nameof(solution));
             if (solution.FilePath is null)
-                throw new ArgumentException($"Path for {solution} must have a non-null path.");
+                throw new ArgumentException($"Path for {solution} must have a non-null path."); // TODO(jmarolf): add resource
 
             return ShowEditorConfigSettingsAsync(solution.FilePath, token);
         }
@@ -78,7 +78,7 @@ namespace Microsoft.CodeAnalysis.Editor
             if (document is null)
                 throw new ArgumentNullException(nameof(document));
             if (document.FilePath is null)
-                throw new ArgumentException($"Path for {document} must have a non-null path.");
+                throw new ArgumentException($"Path for {document} must have a non-null path."); // TODO(jmarolf): add resource
 
             return ShowEditorConfigSettingsAsync(document.FilePath, token);
         }
