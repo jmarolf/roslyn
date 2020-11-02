@@ -6,5 +6,9 @@ namespace Microsoft.CodeAnalysis.Editor
 {
     internal class EditorConfigSetting
     {
+        public EditorConfigSetting(DiagnosticDescriptor descriptor, DiagnosticSeverity effectiveSeverity)
+        {
+
+        }
     }
 }

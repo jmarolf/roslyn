@@ -6,23 +6,28 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Editor.Shared.Utilities;
+using Microsoft.CodeAnalysis.Options;
+using Microsoft.CodeAnalysis.Shared.Extensions;
 
 namespace Microsoft.CodeAnalysis.Editor
 {
-    internal class EditorConfigSettingsDataSource : IEditorConfigSettingsDataRepository
+    internal class EditorConfigSettingsDataSource
+        : IEditorConfigSettingsDataSource
     {
         private IEditorConfigSettingsPresenter _presenter;
         private bool searchEnded = false;
 
         // Disallow concurrent modification of results
         private readonly object gate = new object();
+        private readonly Document _document;
 
-        private readonly SortedDictionary<string, Dictionary<int, EditorConfigSetting>> _resultsPerOrigin;
-
-        public EditorConfigSettingsDataSource()
+        public EditorConfigSettingsDataSource(Document document)
         {
-            _resultsPerOrigin = new SortedDictionary<string, Dictionary<int, EditorConfigSetting>>();
+            _document = document;
         }
 
         public void AddRange(ImmutableArray<EditorConfigSetting> results, IEnumerable<string>? additionalColumns = null)
@@ -52,12 +57,46 @@ namespace Microsoft.CodeAnalysis.Editor
         {
             if (searchEnded)
             {
-                throw new InvalidOperationException("The search has already ended");
+                throw new InvalidOperationException("The search has already ended"); // TODO(jmarolf): update string
             }
 
-            lock (gate)
+            return ImmutableArray<EditorConfigSetting>.Empty;
+        }
+
+        private async Task GetOptionsForTypeAsync(Document document,
+                                                  IDiagnosticAnalyzerService diagnosticAnalyzerService,
+                                                  CancellationToken token)
+        {
+            var project = document.Project;
+            var language = project.Language;
+            var optionsProvider = project.CompilationOptions!.SyntaxTreeOptionsProvider!; // TODO(jmarolf): what are the cases where this is null?
+            var tree = await document.GetSyntaxTreeAsync(token).ConfigureAwait(false);
+
+            var analyzerReferences = document.Project.AnalyzerReferences;
+            foreach (var analyzerReference in analyzerReferences)
             {
-                return _resultsPerOrigin.SelectMany(n => n.Value).Select(n => n.Value).ToImmutableArray();
+                var diagnostics = analyzerReference.GetAnalyzers(language)
+                    .SelectMany(a => diagnosticAnalyzerService.AnalyzerInfoCache.GetDiagnosticDescriptors(a))
+                    .GroupBy(d => d.Id)
+                    .OrderBy(g => g.Key, StringComparer.CurrentCulture)
+                    .Select(g =>
+                    {
+                        var selectedDiagnostic = g.OrderBy(d => d).First(); // TODO(jmarolf): write customer comparer
+                        var severity = selectedDiagnostic.DefaultSeverity;
+                        if (project.CompilationOptions is not null &&
+                            selectedDiagnostic.GetEffectiveSeverity(project.CompilationOptions).ToDiagnosticSeverity() is DiagnosticSeverity compilerSeverity)
+                        {
+                            severity = compilerSeverity;
+                        }
+                        if (tree is not null &&
+                            optionsProvider.TryGetDiagnosticValue(tree, selectedDiagnostic.Id, token, out var treeSeverity) &&
+                            treeSeverity.ToDiagnosticSeverity() is DiagnosticSeverity specificSeverity)
+                        {
+                            severity = specificSeverity;
+                        }
+
+                        return new EditorConfigSetting(selectedDiagnostic, severity);
+                    });
             }
         }
 

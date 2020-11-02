@@ -114,7 +114,7 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings
             Assert.False(presenter.HasSingleResult);
             Assert.Equal(1, presenter.ShowCalled);
 
-            data.AddRange(ImmutableArray.Create(new EditorConfigSetting()));
+            data.AddRange(ImmutableArray.Create(new EditorConfigSetting(null, default)));
             await presenter.WaitForNotifyToBeCalled();
 
             Assert.Equal(1, presenter.ResultCount);
@@ -137,7 +137,7 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings
             Assert.False(presenter.HasSingleResult);
             Assert.Equal(1, presenter.ShowCalled);
 
-            data.AddRange(ImmutableArray.Create(new EditorConfigSetting()));
+            data.AddRange(ImmutableArray.Create(new EditorConfigSetting(null, default)));
             await presenter.WaitForNotifyToBeCalled();
 
             Assert.Equal(1, presenter.ResultCount);
@@ -160,7 +160,7 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings
             Assert.False(presenter.HasSingleResult);
             Assert.Equal(1, presenter.ShowCalled);
 
-            data.AddRange(ImmutableArray.Create(new EditorConfigSetting()));
+            data.AddRange(ImmutableArray.Create(new EditorConfigSetting(null, default)));
             await presenter.WaitForNotifyToBeCalled();
 
             Assert.Equal(1, presenter.ResultCount);
@@ -181,7 +181,7 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings
             Assert.False(presenter.HasSingleResult);
             Assert.Equal(1, presenter.ShowCalled);
 
-            data.AddRange(ImmutableArray.Create(new EditorConfigSetting()));
+            data.AddRange(ImmutableArray.Create(new EditorConfigSetting(null, default)));
             await presenter.WaitForNotifyToBeCalled();
 
             Assert.Equal(1, presenter.ResultCount);
@@ -202,7 +202,7 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings
             Assert.False(presenter.HasSingleResult);
             Assert.Equal(1, presenter.ShowCalled);
 
-            data.AddRange(ImmutableArray.Create(new EditorConfigSetting()));
+            data.AddRange(ImmutableArray.Create(new EditorConfigSetting(null, default)));
             await presenter.WaitForNotifyToBeCalled();
 
             Assert.Equal(1, presenter.ResultCount);
@@ -223,7 +223,7 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings
             Assert.False(presenter.HasSingleResult);
             Assert.Equal(1, presenter.ShowCalled);
 
-            data.AddRange(ImmutableArray.Create(new EditorConfigSetting()));
+            data.AddRange(ImmutableArray.Create(new EditorConfigSetting(null, default)));
             await presenter.WaitForNotifyToBeCalled();
 
             Assert.Equal(1, presenter.ResultCount);

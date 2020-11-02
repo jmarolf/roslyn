@@ -31,7 +31,7 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
             _editorConfigSettingsWindowProvider = editorConfigSettingsWindowProvider;
         }
 
-        public Task ShowAsync(IEditorConfigSettingsDataRepository dataRepository, CancellationToken token)
+        public Task ShowAsync(IEditorConfigSettingsDataSource dataRepository, CancellationToken token)
         {
             var presenter = new EditorConfigSettingsPresenter(_threadingContext, _editorConfigSettingsWindowProvider, dataRepository, new CancellationTokenSource());
             return presenter.ShowAsync();
@@ -53,11 +53,11 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
         private bool _initialized;
         private readonly IThreadingContext _threadingContext;
         private readonly IEditorConfigSettingsWindowProvider _editorConfigSettingsWindowProvider;
-        private readonly IEditorConfigSettingsDataRepository _dataRepository;
+        private readonly IEditorConfigSettingsDataSource _dataRepository;
 
         public EditorConfigSettingsPresenter(IThreadingContext threadingContext,
                                              IEditorConfigSettingsWindowProvider editorConfigSettingsWindowProvider,
-                                             IEditorConfigSettingsDataRepository dataRepository,
+                                             IEditorConfigSettingsDataSource dataRepository,
                                              CancellationTokenSource cancellationSource)
         {
             _threadingContext = threadingContext;
