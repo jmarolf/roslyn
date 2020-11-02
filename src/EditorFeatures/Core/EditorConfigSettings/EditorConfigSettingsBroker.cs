@@ -60,7 +60,7 @@ namespace Microsoft.CodeAnalysis.Editor
             if (project.FilePath is null)
                 throw new ArgumentException($"Path for {project} must have a non-null path.");
 
-            return ShowEditorConfigSettingsAsync(project.FilePath, default);
+            return ShowEditorConfigSettingsAsync(project.FilePath, token);
         }
 
         public Task ShowEditorConfigSettingsAsync(Solution solution, CancellationToken token)
@@ -70,7 +70,7 @@ namespace Microsoft.CodeAnalysis.Editor
             if (solution.FilePath is null)
                 throw new ArgumentException($"Path for {solution} must have a non-null path.");
 
-            return ShowEditorConfigSettingsAsync(solution.FilePath, default);
+            return ShowEditorConfigSettingsAsync(solution.FilePath, token);
         }
 
         public Task ShowEditorConfigSettingsAsync(Document document, CancellationToken token)
@@ -80,11 +80,12 @@ namespace Microsoft.CodeAnalysis.Editor
             if (document.FilePath is null)
                 throw new ArgumentException($"Path for {document} must have a non-null path.");
 
-            return ShowEditorConfigSettingsAsync(document.FilePath, default);
+            return ShowEditorConfigSettingsAsync(document.FilePath, token);
         }
 
         private Task ShowEditorConfigSettingsAsync(string path, CancellationToken token)
         {
+            token.ThrowIfCancellationRequested();
             var dataRepository = _editorConfigSettingsDataRepositoryProvider.GetDataRepository(this, path);
             return _editorPresenationProvider.ShowAsync(dataRepository, token);
         }

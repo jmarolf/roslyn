@@ -19,10 +19,34 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings
             using var workspace = CreateWorkspace();
             var (broker, _, _) = CreateBroker();
             var document = CreateDocument(workspace);
-            var cts = new CancellationTokenSource();
-            var canceledToken = cts.Token;
-            cts.Cancel();
-            _ = await Assert.ThrowsAsync<OperationCanceledException>(async () => await broker.ShowEditorConfigSettingsAsync(document, canceledToken));
+            using var source = new CancellationTokenSource();
+            var token = source.Token;
+            source.Cancel();
+            _ = await Assert.ThrowsAsync<OperationCanceledException>(async () => await broker.ShowEditorConfigSettingsAsync(document, token));
+        }
+
+        [Fact, UseExportProvider]
+        public async Task TestShowSettingsProjectCancellation()
+        {
+            using var workspace = CreateWorkspace();
+            var (broker, _, _) = CreateBroker();
+            var project = CreateProject(workspace);
+            using var source = new CancellationTokenSource();
+            var token = source.Token;
+            source.Cancel();
+            _ = await Assert.ThrowsAsync<OperationCanceledException>(async () => await broker.ShowEditorConfigSettingsAsync(project, token));
+        }
+
+        [Fact, UseExportProvider]
+        public async Task TestShowSettingsSolutionCancellation()
+        {
+            using var workspace = CreateWorkspace();
+            var (broker, _, _) = CreateBroker();
+            var solution = CreateSolution(workspace);
+            using var source = new CancellationTokenSource();
+            var token = source.Token;
+            source.Cancel();
+            _ = await Assert.ThrowsAsync<OperationCanceledException>(async () => await broker.ShowEditorConfigSettingsAsync(solution, token));
         }
     }
 }
