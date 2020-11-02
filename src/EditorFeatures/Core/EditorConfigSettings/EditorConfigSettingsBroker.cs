@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,13 +23,70 @@ namespace Microsoft.CodeAnalysis.Editor
             _editorConfigSettingsDataRepositoryProvider = editorConfigSettingsDataRepositoryProvider;
         }
 
-        public async Task ShowEditorConfigSettingsAsync(Document document, CancellationToken token)
+        public void ShowEditorConfigSettings(Document document)
         {
-            // Cancellation source will be also controlled by the presenter to cancel populating data when user closes the UI
-            var cancellationSource = CancellationTokenSource.CreateLinkedTokenSource(token);
-            var dataRepository = _editorConfigSettingsDataRepositoryProvider.GetDataRepository(this);
-            var presenter = _editorPresenationProvider;
-            _ = presenter.ShowAsync(dataRepository, cancellationSource.Token);
+            if (document is null)
+                throw new ArgumentNullException(nameof(document));
+            if (document.FilePath is null)
+                throw new ArgumentException($"Path for {document} must have a non-null path.");
+
+            _ = ShowEditorConfigSettingsAsync(document.FilePath, default);
+        }
+
+        public void ShowEditorConfigSettings(Project project)
+        {
+            if (project is null)
+                throw new ArgumentNullException(nameof(project));
+            if (project.FilePath is null)
+                throw new ArgumentException($"Path for {project} must have a non-null path.");
+
+            _ = ShowEditorConfigSettingsAsync(project.FilePath, default);
+        }
+
+        public void ShowEditorConfigSettings(Solution solution)
+        {
+            if (solution is null)
+                throw new ArgumentNullException(nameof(solution));
+            if (solution.FilePath is null)
+                throw new ArgumentException($"Path for {solution} must have a non-null path.");
+
+            _ = ShowEditorConfigSettingsAsync(solution.FilePath, default);
+        }
+
+        public Task ShowEditorConfigSettingsAsync(Project project, CancellationToken token)
+        {
+            if (project is null)
+                throw new ArgumentNullException(nameof(project));
+            if (project.FilePath is null)
+                throw new ArgumentException($"Path for {project} must have a non-null path.");
+
+            return ShowEditorConfigSettingsAsync(project.FilePath, default);
+        }
+
+        public Task ShowEditorConfigSettingsAsync(Solution solution, CancellationToken token)
+        {
+            if (solution is null)
+                throw new ArgumentNullException(nameof(solution));
+            if (solution.FilePath is null)
+                throw new ArgumentException($"Path for {solution} must have a non-null path.");
+
+            return ShowEditorConfigSettingsAsync(solution.FilePath, default);
+        }
+
+        public Task ShowEditorConfigSettingsAsync(Document document, CancellationToken token)
+        {
+            if (document is null)
+                throw new ArgumentNullException(nameof(document));
+            if (document.FilePath is null)
+                throw new ArgumentException($"Path for {document} must have a non-null path.");
+
+            return ShowEditorConfigSettingsAsync(document.FilePath, default);
+        }
+
+        private Task ShowEditorConfigSettingsAsync(string path, CancellationToken token)
+        {
+            var dataRepository = _editorConfigSettingsDataRepositoryProvider.GetDataRepository(this, path);
+            return _editorPresenationProvider.ShowAsync(dataRepository, token);
         }
     }
 }

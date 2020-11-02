@@ -52,7 +52,7 @@ namespace Microsoft.VisualStudio.Editor.Commanding
                 await TaskScheduler.Default;
                 // Launch the tabular data control
                 var document = _documentProvider.GetDocument(args.TextView.TextSnapshot, token);
-                await _broker.ShowEditorConfigSettingsAsync(document, token).ConfigureAwait(false);
+                _broker.ShowEditorConfigSettings(document);
             });
             return true;
         }

@@ -6,6 +6,6 @@ namespace Microsoft.CodeAnalysis.Editor
 {
     internal interface IEditorConfigSettingsDataRepositoryProvider
     {
-        IEditorConfigSettingsDataRepository GetDataRepository(IEditorConfigSettingsBroker broker);
+        IEditorConfigSettingsDataRepository GetDataRepository(IEditorConfigSettingsBroker broker, string path);
     }
 }

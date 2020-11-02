@@ -8,6 +8,6 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings.Mocks
     {
         internal MockEditorConfigSettingsDataRepository DataRepository { get; } = new MockEditorConfigSettingsDataRepository();
 
-        public IEditorConfigSettingsDataRepository GetDataRepository(IEditorConfigSettingsBroker broker) => DataRepository;
+        public IEditorConfigSettingsDataRepository GetDataRepository(IEditorConfigSettingsBroker broker, string path) => DataRepository;
     }
 }
