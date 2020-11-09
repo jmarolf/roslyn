@@ -63,19 +63,16 @@ namespace Microsoft.CodeAnalysis.Editor
             return ImmutableArray<EditorConfigSetting>.Empty;
         }
 
-        private async Task GetOptionsForTypeAsync(Document document,
+        private async Task GetOptionsForTypeAsync(CompilationOptions compilationOptions,
+                                                  SyntaxTree tree,
+                                                  IEnumerable<AnalyzerReference> analyzerReferences,
                                                   IDiagnosticAnalyzerService diagnosticAnalyzerService,
                                                   CancellationToken token)
         {
-            var project = document.Project;
-            var language = project.Language;
-            var optionsProvider = project.CompilationOptions!.SyntaxTreeOptionsProvider!; // TODO(jmarolf): what are the cases where this is null?
-            var tree = await document.GetSyntaxTreeAsync(token).ConfigureAwait(false);
-
-            var analyzerReferences = document.Project.AnalyzerReferences;
+            var optionsProvider = compilationOptions.SyntaxTreeOptionsProvider!; // TODO(jmarolf): what are the cases where this is null?
             foreach (var analyzerReference in analyzerReferences)
             {
-                var diagnostics = analyzerReference.GetAnalyzers(language)
+                var diagnostics = analyzerReference.GetAnalyzersForAllLanguages()
                     .SelectMany(a => diagnosticAnalyzerService.AnalyzerInfoCache.GetDiagnosticDescriptors(a))
                     .GroupBy(d => d.Id)
                     .OrderBy(g => g.Key, StringComparer.CurrentCulture)
@@ -83,13 +80,11 @@ namespace Microsoft.CodeAnalysis.Editor
                     {
                         var selectedDiagnostic = g.OrderBy(d => d).First(); // TODO(jmarolf): write customer comparer
                         var severity = selectedDiagnostic.DefaultSeverity;
-                        if (project.CompilationOptions is not null &&
-                            selectedDiagnostic.GetEffectiveSeverity(project.CompilationOptions).ToDiagnosticSeverity() is DiagnosticSeverity compilerSeverity)
+                        if (selectedDiagnostic.GetEffectiveSeverity(compilationOptions).ToDiagnosticSeverity() is DiagnosticSeverity compilerSeverity)
                         {
                             severity = compilerSeverity;
                         }
-                        if (tree is not null &&
-                            optionsProvider.TryGetDiagnosticValue(tree, selectedDiagnostic.Id, token, out var treeSeverity) &&
+                        if (optionsProvider.TryGetDiagnosticValue(tree, selectedDiagnostic.Id, token, out var treeSeverity) &&
                             treeSeverity.ToDiagnosticSeverity() is DiagnosticSeverity specificSeverity)
                         {
                             severity = specificSeverity;
@@ -97,7 +92,36 @@ namespace Microsoft.CodeAnalysis.Editor
 
                         return new EditorConfigSetting(selectedDiagnostic, severity);
                     });
+                AddRange(diagnostics.ToImmutableArray());
             }
+        }
+
+        private static ImmutableArray<EditorConfigSetting> GetEditorConfigSettings(AnalyzerReference analyzerReference,
+                                                                           string path,
+                                                                           AnalyzerConfigSet analyzerConfigSet,
+                                                                           CompilationOptions compilationOptions,
+                                                                           IDiagnosticAnalyzerService diagnosticAnalyzerService,
+                                                                           CancellationToken token)
+        {
+            token.ThrowIfCancellationRequested();
+            var analyzerOptions = analyzerConfigSet.GetOptionsForSourcePath(path);
+            var settings = analyzerReference.GetAnalyzersForAllLanguages() // TODO(jmarolf): is it ok to include for all language?
+                    .SelectMany(a => diagnosticAnalyzerService.AnalyzerInfoCache.GetDiagnosticDescriptors(a))
+                    .GroupBy(d => d.Id)
+                    .OrderBy(g => g.Key, StringComparer.CurrentCulture)
+                    .Select(g =>
+                    {
+                        var selectedDiagnostic = g.OrderBy(d => d).First(); // TODO(jmarolf): write customer comparer
+                        var reportDiagnostic = selectedDiagnostic.GetEffectiveSeverity(compilationOptions, analyzerOptions);
+                        var severity = selectedDiagnostic.DefaultSeverity;
+                        if (reportDiagnostic.ToDiagnosticSeverity() is DiagnosticSeverity specificSeverity)
+                        {
+                            severity = specificSeverity;
+                        }
+
+                        return new EditorConfigSetting(selectedDiagnostic, severity);
+                    });
+            return settings.ToImmutableArray();
         }
 
         public void RegisterPresenter(IEditorConfigSettingsPresenter presenter)
