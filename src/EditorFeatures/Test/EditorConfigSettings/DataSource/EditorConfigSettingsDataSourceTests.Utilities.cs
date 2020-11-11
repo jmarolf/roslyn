@@ -86,10 +86,15 @@ dotnet_diagnostic.cs000.severity = error";
 
             public TestPresenter(Action<ImmutableArray<EditorConfigSetting>>? notifyOfUpdate = null)
             {
-                _notifyOfUpdate = notifyOfUpdate ?? r  => { };
+                _notifyOfUpdate = notifyOfUpdate ?? new Action<ImmutableArray<EditorConfigSetting>>((r) => { });
             }
 
             public event EventHandler<EventArgs>? SearchDismissed;
+
+            public void Cancel()
+            {
+                this.SearchDismissed(null, null);
+            }
 
             public Task NotifyOfUpdateAsync(ImmutableArray<EditorConfigSetting> results, IEnumerable<string>? additionalColumns)
             {

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.Test.Utilities;
@@ -19,14 +21,12 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings.DataSourc
             var sync = new SemaphoreSlim(0);
             dataSource.RegisterPresenter(new TestPresenter(results =>
             {
-                foreach (var result in results)
-                {
-                    Assert.Equal(ReportDiagnostic.Error, result.EffectiveSeverity);
-                }
-                Assert.Equal(3, results.Length);
+                AssertCorrectSeverity(results, 3, ReportDiagnostic.Error);
                 sync.Release();
             }));
             await sync.WaitAsync();
+            var data = dataSource.GetCurrentDataSnapshot();
+            AssertCorrectSeverity(data, 3, ReportDiagnostic.Error);
         }
 
         [Fact]
@@ -42,24 +42,35 @@ dotnet_diagnostic.compilation.severity = none
             var sync = new SemaphoreSlim(0);
             dataSource.RegisterPresenter(new TestPresenter(results =>
             {
-                foreach (var result in results)
-                {
-                    Assert.Equal(ReportDiagnostic.Suppress, result.EffectiveSeverity);
-                }
-                Assert.Equal(3, results.Length);
+                AssertCorrectSeverity(results, 3, ReportDiagnostic.Suppress);
                 sync.Release();
             }));
             await sync.WaitAsync();
+            var data = dataSource.GetCurrentDataSnapshot();
+            AssertCorrectSeverity(data, 3, ReportDiagnostic.Suppress);
         }
 
         [Fact]
-        public async Task TestDocuementDataSourceCallPresenterCancelledAsync()
+        public void TestDocuementDataSourceCallPresenterCancelledAsync()
         {
             var dataSource = CreateDocuementDataSource();
-            var sync = new SemaphoreSlim(0);
-            var presenter = new TestPresenter(results => { });
+            var presenter = new TestPresenter();
             dataSource.RegisterPresenter(presenter);
-            await sync.WaitAsync();
+            presenter.Cancel();
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                _ = dataSource.GetCurrentDataSnapshot();
+            });
+        }
+
+        private static void AssertCorrectSeverity(ImmutableArray<EditorConfigSetting> results, int expectedLength, ReportDiagnostic expectedReportDiagnostic)
+        {
+            foreach (var result in results)
+            {
+                Assert.Equal(expectedReportDiagnostic, result.EffectiveSeverity);
+            }
+
+            Assert.Equal(expectedLength, results.Length);
         }
     }
 }
