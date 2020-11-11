@@ -6,9 +6,13 @@ namespace Microsoft.CodeAnalysis.Editor
 {
     internal class EditorConfigSetting
     {
-        public EditorConfigSetting(DiagnosticDescriptor descriptor, DiagnosticSeverity effectiveSeverity)
+        public EditorConfigSetting(DiagnosticDescriptor descriptor, ReportDiagnostic effectiveSeverity)
         {
-
+            Descriptor = descriptor;
+            EffectiveSeverity = effectiveSeverity;
         }
+
+        public DiagnosticDescriptor Descriptor { get; }
+        public ReportDiagnostic EffectiveSeverity { get; }
     }
 }

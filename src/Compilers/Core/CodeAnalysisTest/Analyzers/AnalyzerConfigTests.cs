@@ -2124,7 +2124,7 @@ option2 = config3
         [InlineData(@"\\", false)] //invalid: editorconfig sees an escaped, literal backslash
         [InlineData(@"/\{\}\,\[\]\*", true)]
         [InlineData(@"c:\my\file.cs", false)] // invalid: editorconfig sees a single file called 'c:(\m)y(\f)ile.cs' (i.e. \m and \f are escape chars)
-        [InlineData(@"\my\file.cs", false)] // invalid: editorconfig sees a single file called '(\m)y(\f)ile.cs' 
+        [InlineData(@"\my\file.cs", false)] // invalid: editorconfig sees a single file called '(\m)y(\f)ile.cs'
         [InlineData(@"\\my\\file.cs", false)] // invalid: editorconfig sees a single file called '\my\file.cs' with literal backslashes
         [InlineData(@"\\\\my\\file.cs", false)] // invalid: editorconfig sees a single file called '\\my\file.cs' not a UNC path
         [InlineData("//server/file.cs", true)]
