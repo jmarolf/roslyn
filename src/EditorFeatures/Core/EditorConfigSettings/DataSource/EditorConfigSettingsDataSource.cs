@@ -8,53 +8,20 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CodeStyle;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Editing;
+using Microsoft.CodeAnalysis.Formatting;
+using Microsoft.CodeAnalysis.Options;
+using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Shared.Extensions;
 
 namespace Microsoft.CodeAnalysis.Editor
 {
+
     internal abstract class EditorConfigSettingsDataSource
-        : IEditorConfigSettingsDataSource
+        : EditorConfigSettingsDataSourceBase
     {
-        protected readonly CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
-
-        // Disallow concurrent modification of results
-        private readonly object gate = new object();
-        private readonly List<EditorConfigSetting> _snapshot = new List<EditorConfigSetting>();
-        internal bool Completed = false;
-        private IEditorConfigSettingsPresenter? _presenter;
-
-        public void RegisterPresenter(IEditorConfigSettingsPresenter presenter)
-        {
-            _presenter = presenter ?? throw new ArgumentNullException(nameof(presenter));
-            _presenter.SearchDismissed += OnSearchDismissed;
-        }
-
-        public ImmutableArray<EditorConfigSetting> GetCurrentDataSnapshot()
-        {
-            if (Completed)
-            {
-                throw new InvalidOperationException("The search has already ended"); // TODO(jmarolf): update string
-            }
-
-            return _snapshot.ToImmutableArray();
-        }
-
-        public void AddRange(ImmutableArray<EditorConfigSetting> results, IEnumerable<string>? additionalColumns = null)
-        {
-            if (Completed)
-            {
-                throw new InvalidOperationException("The search has already ended");
-            }
-
-            lock (gate)
-            {
-                _snapshot.AddRange(results);
-            }
-
-            NotifyPresenter(results, additionalColumns);
-        }
-
         protected void GetOptionsForType(CompilationOptions compilationOptions,
                                        string path,
                                        IEnumerable<AnalyzerReference> analyzerReferences,
@@ -86,33 +53,9 @@ namespace Microsoft.CodeAnalysis.Editor
                     {
                         var selectedDiagnostic = g.OrderBy(d => d).First(); // TODO(jmarolf): write customer comparer
                         var severity = selectedDiagnostic.GetEffectiveSeverity(compilationOptions, analyzerOptions);
-                        return new EditorConfigSetting(selectedDiagnostic, severity);
+                        return EditorConfigSetting.Create(selectedDiagnostic, severity);
                     });
             return settings.ToImmutableArray();
-        }
-
-        private void NotifyPresenter(ImmutableArray<EditorConfigSetting> results, IEnumerable<string>? additionalColumns = null)
-        {
-            _presenter?.NotifyOfUpdateAsync(results, additionalColumns);
-        }
-
-        private void OnSearchDismissed(object sender, EventArgs e)
-        {
-            CancellationTokenSource.Cancel();
-            FreeResources();
-        }
-
-        private void FreeResources()
-        {
-            if (Completed)
-                return;
-
-            if (_presenter is not null)
-            {
-                _presenter.SearchDismissed -= OnSearchDismissed;
-
-            }
-            Completed = true;
         }
     }
 }

@@ -63,11 +63,19 @@ dotnet_diagnostic.compilation.severity = none
             });
         }
 
+        [Fact]
+        public void TestGetCodeStyleOptions()
+        {
+            var codeStyleDataSource = CreateCodeStyleDataSource();
+            var results = codeStyleDataSource.GetCurrentDataSnapshot();
+            Assert.Equal(37, results.Length);
+        }
+
         private static void AssertCorrectSeverity(ImmutableArray<EditorConfigSetting> results, int expectedLength, ReportDiagnostic expectedReportDiagnostic)
         {
             foreach (var result in results)
             {
-                Assert.Equal(expectedReportDiagnostic, result.EffectiveSeverity);
+                Assert.Equal(expectedReportDiagnostic, result.Severity);
             }
 
             Assert.Equal(expectedLength, results.Length);

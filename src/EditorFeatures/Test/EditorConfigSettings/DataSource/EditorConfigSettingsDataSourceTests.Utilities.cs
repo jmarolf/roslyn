@@ -19,6 +19,25 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings.DataSourc
 {
     public partial class EditorConfigSettingsDataSourceTests
     {
+
+        private static CodeStyleSettingsDataSource CreateCodeStyleDataSource()
+        {
+            using var workspace = CreateWorkspace();
+            var project = workspace.AddProject(
+                ProjectInfo.Create(
+                    ProjectId.CreateNewId(),
+                    VersionStamp.Create(),
+                    "CSharpProject",
+                    "CSharpProject",
+                    LanguageNames.CSharp));
+
+            var documentId = DocumentId.CreateNewId(project.Id);
+            var documentLoader = TextLoader.From(TextAndVersion.Create(SourceText.From("class A { B B {get} }"), VersionStamp.Create()));
+            var docInfo = DocumentInfo.Create(documentId, "test.cs", loader: documentLoader, filePath: "Z:\\test.cs");
+            var document = workspace.AddDocument(docInfo);
+            return new CodeStyleSettingsDataSource(document.Project.Solution.Options);
+        }
+
         private static EditorConfigSettingsDataSource CreateDocuementDataSource(string? editorConfig = null)
         {
             using var workspace = CreateWorkspace();
