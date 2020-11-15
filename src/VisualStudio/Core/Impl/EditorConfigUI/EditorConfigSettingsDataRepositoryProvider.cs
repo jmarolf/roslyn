@@ -3,19 +3,15 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
+using System.Composition;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Editor;
 using Microsoft.CodeAnalysis.Host.Mef;
 
 namespace Microsoft.VisualStudio.LanguageServices.Implementation.EditorConfigUI
 {
-    [Export(typeof(IEditorConfigSettingsDataRepositoryProvider))]
+    [Export(typeof(IEditorConfigSettingsDataRepositoryProvider)), Shared]
     internal class EditorConfigSettingsDataRepositoryProvider : IEditorConfigSettingsDataRepositoryProvider
     {
         private readonly VisualStudioWorkspace _workspace;

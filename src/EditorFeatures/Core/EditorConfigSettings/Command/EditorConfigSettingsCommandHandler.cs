@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.Editor;
 using Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense;
 using Microsoft.CodeAnalysis.Editor.Shared.Utilities;
 using Microsoft.CodeAnalysis.Host.Mef;
+using Microsoft.CodeAnalysis.Shared.Extensions;
 using Microsoft.VisualStudio.Commanding;
 using Microsoft.VisualStudio.Threading;
 using Microsoft.VisualStudio.Utilities;
@@ -21,21 +22,18 @@ namespace Microsoft.VisualStudio.Editor.Commanding
     internal class EditorConfigSettingsCommandHandler : ICommandHandler<EditorConfigSettingsCommandArgs>
     {
         private readonly IThreadingContext _threadingContext;
-        private readonly IDocumentProvider _documentProvider;
         private readonly IEditorConfigSettingsBroker _broker;
+        private readonly IDocumentProvider _documentProvider;
 
         public string DisplayName => EditorFeaturesResources.View_editorconfig_settings;
 
         [ImportingConstructor]
         [Obsolete(MefConstruction.ImportingConstructorMessage, error: true)]
-        public EditorConfigSettingsCommandHandler(
-            IThreadingContext threadingContext,
-            IDocumentProvider documentProvider,
-            IEditorConfigSettingsBroker broker)
+        public EditorConfigSettingsCommandHandler(IThreadingContext threadingContext, IEditorConfigSettingsBroker broker)
         {
             _threadingContext = threadingContext;
-            _documentProvider = documentProvider;
             _broker = broker;
+            _documentProvider = new DocumentProvider(_threadingContext);
         }
 
         public bool ExecuteCommand(EditorConfigSettingsCommandArgs args, CommandExecutionContext executionContext)
@@ -52,7 +50,7 @@ namespace Microsoft.VisualStudio.Editor.Commanding
                 await TaskScheduler.Default;
                 // Launch the tabular data control
                 var document = _documentProvider.GetDocument(args.TextView.TextSnapshot, token);
-                _broker.ShowEditorConfigSettings(document);
+                _broker?.ShowEditorConfigSettings(document);
             });
             return true;
         }

@@ -3,23 +3,27 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.ComponentModel.Composition;
+using System.Composition;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.Host.Mef;
 
 namespace Microsoft.CodeAnalysis.Editor
 {
-    [Export(typeof(IEditorConfigSettingsBroker))]
+    [Export(typeof(IEditorConfigSettingsBroker)), Shared]
     internal class EditorConfigSettingsBroker : IEditorConfigSettingsBroker
     {
-        private readonly IEditorConfigSettingsPresenterProvider _editorPresenationProvider;
+        private readonly IEditorConfigSettingsPresenterProvider? _editorPresenationProvider;
         private readonly IEditorConfigSettingsDataRepositoryProvider _editorConfigSettingsDataRepositoryProvider;
 
         [ImportingConstructor]
-        public EditorConfigSettingsBroker(IEditorConfigSettingsPresenterProvider editorPresenationProvider,
-                                          IEditorConfigSettingsDataRepositoryProvider editorConfigSettingsDataRepositoryProvider)
+        [Obsolete(MefConstruction.ImportingConstructorMessage, error: true)]
+        public EditorConfigSettingsBroker(
+            //IEditorConfigSettingsPresenterProvider editorPresenationProvider,
+            IEditorConfigSettingsDataRepositoryProvider editorConfigSettingsDataRepositoryProvider
+            )
         {
-            _editorPresenationProvider = editorPresenationProvider;
+            _editorPresenationProvider = null;
             _editorConfigSettingsDataRepositoryProvider = editorConfigSettingsDataRepositoryProvider;
         }
 
@@ -87,7 +91,8 @@ namespace Microsoft.CodeAnalysis.Editor
         {
             token.ThrowIfCancellationRequested();
             var dataRepository = _editorConfigSettingsDataRepositoryProvider.GetDataRepository(this, path);
-            return _editorPresenationProvider.ShowAsync(dataRepository, token);
+            //return _editorPresenationProvider.ShowAsync(dataRepository, token);
+            return Task.CompletedTask;
         }
     }
 }
