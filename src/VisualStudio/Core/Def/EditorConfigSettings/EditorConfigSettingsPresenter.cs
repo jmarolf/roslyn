@@ -20,24 +20,22 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
     internal class EditorConfigSettingsPresenterProvider : IEditorConfigSettingsPresenterProvider
     {
         private readonly IThreadingContext _threadingContext;
-        private readonly IEditorConfigSettingsWindowProvider _editorConfigSettingsWindowProvider;
 
         [ImportingConstructor]
         [Obsolete(MefConstruction.ImportingConstructorMessage, error: true)]
-        public EditorConfigSettingsPresenterProvider(IThreadingContext threadingContext,
-                                                     IEditorConfigSettingsWindowProvider editorConfigSettingsWindowProvider)
+        public EditorConfigSettingsPresenterProvider(IThreadingContext threadingContext)
         {
             _threadingContext = threadingContext;
-            _editorConfigSettingsWindowProvider = editorConfigSettingsWindowProvider;
         }
 
         public Task ShowAsync(IEditorConfigSettingsDataSource dataRepository, CancellationToken token)
         {
-            var presenter = new EditorConfigSettingsPresenter(_threadingContext, _editorConfigSettingsWindowProvider, dataRepository, new CancellationTokenSource());
+            var presenter = new EditorConfigSettingsPresenter(_threadingContext, dataRepository, new CancellationTokenSource());
             return presenter.ShowAsync();
         }
     }
 
+    [Export(typeof(IEditorConfigSettingsPresenter))]
     internal partial class EditorConfigSettingsPresenter : IEditorConfigSettingsPresenter, ITableDataSource
     {
         public string SourceTypeIdentifier => "EditorConfigSettings";
@@ -52,17 +50,15 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
         private EditorConfigSettingsSnapshotFactory _editorConfigSettingsSnapshotFactory;
         private bool _initialized;
         private readonly IThreadingContext _threadingContext;
-        private readonly IEditorConfigSettingsWindowProvider _editorConfigSettingsWindowProvider;
         private readonly IEditorConfigSettingsDataSource _dataRepository;
 
+        [ImportingConstructor]
         public EditorConfigSettingsPresenter(IThreadingContext threadingContext,
-                                             IEditorConfigSettingsWindowProvider editorConfigSettingsWindowProvider,
                                              IEditorConfigSettingsDataSource dataRepository,
                                              CancellationTokenSource cancellationSource)
         {
             _threadingContext = threadingContext;
-            _editorConfigSettingsWindowProvider = editorConfigSettingsWindowProvider;
-            _dataRepository = dataRepository;
+            //_dataRepository = dataRepository;
             CancellationSource = cancellationSource;
         }
 
@@ -123,7 +119,6 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
             _initialized = true;
             await _threadingContext.JoinableTaskFactory.SwitchToMainThreadAsync();
             // TODO(jmarolf): may want to re-use the FAR table to show _something_ here
-            _editorConfigSettingsWindow = _editorConfigSettingsWindowProvider.ShowWindow();
             _editorConfigSettingsWindow.Closed += OnWindowClosed;
             _editorConfigSettingsWindow.Manager.AddSource(this, Columns);
         }

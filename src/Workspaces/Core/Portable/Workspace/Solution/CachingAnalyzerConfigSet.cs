@@ -11,14 +11,14 @@ namespace Microsoft.CodeAnalysis
     {
         private readonly ConcurrentDictionary<string, AnalyzerConfigOptionsResult> _sourcePathToResult = new();
         private readonly Func<string, AnalyzerConfigOptionsResult> _computeFunction;
-        private readonly AnalyzerConfigSet _underlyingSet;
+        internal readonly AnalyzerConfigSet UnderlyingSet;
 
-        public AnalyzerConfigOptionsResult GlobalConfigOptions => _underlyingSet.GlobalConfigOptions;
+        public AnalyzerConfigOptionsResult GlobalConfigOptions => UnderlyingSet.GlobalConfigOptions;
 
         public CachingAnalyzerConfigSet(AnalyzerConfigSet underlyingSet)
         {
-            _underlyingSet = underlyingSet;
-            _computeFunction = _underlyingSet.GetOptionsForSourcePath;
+            UnderlyingSet = underlyingSet;
+            _computeFunction = UnderlyingSet.GetOptionsForSourcePath;
         }
 
         public AnalyzerConfigOptionsResult GetOptionsForSourcePath(string sourcePath)

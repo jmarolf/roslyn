@@ -269,6 +269,23 @@ namespace Microsoft.CodeAnalysis
             return configSet.GetOptionsForSourcePath(path).AnalyzerOptions;
         }
 
+        internal async Task<AnalyzerConfigSet> GetAnalyzerConfigSetAsync(CancellationToken token)
+        {
+            return (await _lazyAnalyzerConfigSet.GetValueAsync(token).ConfigureAwait(false)).UnderlyingSet;
+        }
+
+        internal bool TryGetAnalyzerConfigSet(out AnalyzerConfigSet? analyzerConfigSet)
+        {
+            if (_lazyAnalyzerConfigSet.TryGetValue(out var set))
+            {
+                analyzerConfigSet = set.UnderlyingSet;
+                return true;
+            }
+
+            analyzerConfigSet = null;
+            return false;
+        }
+
         public AnalyzerConfigOptionsResult? GetAnalyzerConfigOptions()
         {
             // We need to find the analyzer config options at the root of the project.
