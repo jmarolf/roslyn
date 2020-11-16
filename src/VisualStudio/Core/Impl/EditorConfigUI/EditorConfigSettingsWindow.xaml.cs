@@ -15,14 +15,16 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Microsoft.CodeAnalysis.Editor.EditorConfigSettings;
 using Microsoft.VisualStudio.PlatformUI;
+using Microsoft.VisualStudio.Shell.TableManager;
 
 namespace Microsoft.VisualStudio.LanguageServices.Implementation.EditorConfigUI
 {
     /// <summary>
     /// Interaction logic for EditorConfigSettingsDialog.xaml
     /// </summary>
-    internal partial class EditorConfigSettingsDialog : DialogWindow
+    internal partial class EditorConfigSettingsWindow : DialogWindow, IEditorConfigSettingsWindow
     {
 
         public string RemoveUnusedReferences => "Remove Unused References";
@@ -31,11 +33,13 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation.EditorConfigUI
         public string Apply => "Apply";
         public string Cancel => ServicesVSResources.Cancel;
 
-        public EditorConfigSettingsDialog(FrameworkElement element)
+        public EditorConfigSettingsWindow(FrameworkElement element)
         {
             InitializeComponent();
 
             TablePanel.Child = element;
         }
+
+        public ITableManager Manager { get; }
     }
 }

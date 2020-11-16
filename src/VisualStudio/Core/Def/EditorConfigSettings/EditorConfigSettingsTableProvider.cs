@@ -27,7 +27,6 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
     [Export(typeof(EditorConfigSettingsTableProvider))]
     internal class EditorConfigSettingsTableProvider
     {
-        private readonly ITableManagerProvider _tableMangerProvider;
         private readonly IWpfTableControlProvider _tableControlProvider;
         private readonly EditorConfigSettingsPresenter _dataSource;
         private readonly ITableManager _tableManager;
@@ -42,9 +41,6 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
 
             _tableManager = tableMangerProvider.GetTableManager(nameof(EditorConfigSettingsPresenter));
             _tableControlProvider = tableControlProvider;
-
-            _dataSource = new EditorConfigSettingsPresenter(null, null, default);
-            _tableManager.AddSource(_dataSource, EditorConfigSettingsColumnDefinitions.ColumnNames);
         }
 
         internal static class EditorConfigSettingsColumnDefinitions

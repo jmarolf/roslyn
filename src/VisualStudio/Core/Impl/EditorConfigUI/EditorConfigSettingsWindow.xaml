@@ -1,4 +1,4 @@
-﻿<vsplatform:DialogWindow  x:Class="Microsoft.VisualStudio.LanguageServices.Implementation.EditorConfigUI.EditorConfigSettingsDialog"
+﻿<vsplatform:DialogWindow  x:Class="Microsoft.VisualStudio.LanguageServices.Implementation.EditorConfigUI.EditorConfigSettingsWindow"
         x:ClassModifier="internal"
         x:Uid="EditorConfigSettingsDialog"
         x:Name="dialog"

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.Editor.Shared.Utilities;
 using Microsoft.VisualStudio.Shell.TableControl;
 using Microsoft.VisualStudio.Shell.TableManager;
+using static Microsoft.VisualStudio.LanguageServices.EditorConfigSettings.EditorConfigSettingsTableProvider;
 
 namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
 {
@@ -24,26 +25,26 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
         public event EventHandler<EventArgs>? SearchDismissed;
         private List<ITableDataSink> TableSinks { get; } = new List<ITableDataSink>();
         public CancellationTokenSource CancellationSource { get; }
-
-        private IEditorConfigSettingsWindow _editorConfigSettingsWindow;
-        private EditorConfigSettingsSnapshotFactory _editorConfigSettingsSnapshotFactory;
         private bool _initialized;
         private readonly IThreadingContext _threadingContext;
+        private readonly IEditorConfigSettingsWindowProvider _editorConfigSettingsWindowProvider;
         private readonly IEditorConfigSettingsDataSource _dataRepository;
 
         public EditorConfigSettingsPresenter(IThreadingContext threadingContext,
+                                             IEditorConfigSettingsWindowProvider editorConfigSettingsWindowProvider,
                                              IEditorConfigSettingsDataSource dataRepository,
                                              CancellationTokenSource cancellationSource)
         {
             _threadingContext = threadingContext;
-            //_dataRepository = dataRepository;
+            _editorConfigSettingsWindowProvider = editorConfigSettingsWindowProvider;
+            _dataRepository = dataRepository;
             CancellationSource = cancellationSource;
         }
 
         public async Task NotifyOfUpdateAsync(ImmutableArray<EditorConfigSetting> results, IEnumerable<string>? additionalColumns)
         {
             // Notify our intermediate class that there is more data.
-            _editorConfigSettingsSnapshotFactory.NotifyOfUpdate();
+            // _editorConfigSettingsSnapshotFactory.NotifyOfUpdate();
 
             // Don't notify table sinks if the search has ended
             if (CancellationSource.IsCancellationRequested)
@@ -96,9 +97,11 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
 
             _initialized = true;
             await _threadingContext.JoinableTaskFactory.SwitchToMainThreadAsync();
+
             // TODO(jmarolf): may want to re-use the FAR table to show _something_ here
-            _editorConfigSettingsWindow.Closed += OnWindowClosed;
-            _editorConfigSettingsWindow.Manager.AddSource(this, Columns);
+            var editorConfigSettingsWindow = _editorConfigSettingsWindowProvider.ShowWindow();
+            editorConfigSettingsWindow.Closed += OnWindowClosed;
+            editorConfigSettingsWindow.Manager.AddSource(this, EditorConfigSettingsColumnDefinitions.ColumnNames);
         }
 
         private void OnWindowClosed(object sender, EventArgs e)
@@ -111,10 +114,10 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
             CancellationSource.Cancel();
             SearchDismissed?.Invoke(this, EventArgs.Empty);
 
-            if (_editorConfigSettingsWindow is not null)
-            {
-                _editorConfigSettingsWindow.Closed -= OnWindowClosed;
-            }
+            //if (_editorConfigSettingsWindow is not null)
+            //{
+            //    _editorConfigSettingsWindow.Closed -= OnWindowClosed;
+            //}
         }
 
         private List<string> addedColumns = null;
@@ -131,12 +134,12 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
                 // Ensure that we don't add a column twice
                 var newlyAddedColumns = additionalColumns.Where(n => !addedColumns.Contains(n));
                 addedColumns.AddRange(newlyAddedColumns);
-                _editorConfigSettingsWindow.Manager.AddSource(new SourceToAddColumns(), newlyAddedColumns.ToArray());
+                //_editorConfigSettingsWindow.Manager.AddSource(new SourceToAddColumns(), newlyAddedColumns.ToArray());
             }
             else
             {
                 addedColumns = additionalColumns.ToList();
-                _editorConfigSettingsWindow.Manager.AddSource(new SourceToAddColumns(), additionalColumns.ToArray());
+                //_editorConfigSettingsWindow.Manager.AddSource(new SourceToAddColumns(), additionalColumns.ToArray());
             }
         }
 
@@ -146,7 +149,7 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
         /// </summary>
         public IDisposable Subscribe(ITableDataSink sink)
         {
-            sink.AddFactory(_editorConfigSettingsSnapshotFactory);
+            //sink.AddFactory(_editorConfigSettingsSnapshotFactory);
             TableSinks.Add(sink);
             return new RemoveSinkWhenDisposed(TableSinks, sink);
         }

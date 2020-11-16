@@ -15,17 +15,19 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
     internal class EditorConfigSettingsPresenterProvider : IEditorConfigSettingsPresenterProvider
     {
         private readonly IThreadingContext _threadingContext;
+        private readonly IEditorConfigSettingsWindowProvider _editorConfigSettingsWindowProvider;
 
         [ImportingConstructor]
         [Obsolete(MefConstruction.ImportingConstructorMessage, error: true)]
-        public EditorConfigSettingsPresenterProvider(IThreadingContext threadingContext)
+        public EditorConfigSettingsPresenterProvider(IThreadingContext threadingContext, IEditorConfigSettingsWindowProvider editorConfigSettingsWindowProvider)
         {
             _threadingContext = threadingContext;
+            _editorConfigSettingsWindowProvider = editorConfigSettingsWindowProvider;
         }
 
         public Task ShowAsync(IEditorConfigSettingsDataSource dataRepository, CancellationToken token)
         {
-            var presenter = new EditorConfigSettingsPresenter(_threadingContext, dataRepository, new CancellationTokenSource());
+            var presenter = new EditorConfigSettingsPresenter(_threadingContext, _editorConfigSettingsWindowProvider, dataRepository, new CancellationTokenSource());
             return presenter.ShowAsync();
         }
     }

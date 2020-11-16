@@ -4,13 +4,14 @@
 
 using System;
 using System.Composition;
+using Microsoft.CodeAnalysis.Editor.EditorConfigSettings;
 using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.VisualStudio.LanguageServices.EditorConfigSettings;
 
 namespace Microsoft.VisualStudio.LanguageServices.Implementation.EditorConfigUI
 {
-    [Export(typeof(EditorConfigSettingsDialogProvider)), Shared]
-    internal class EditorConfigSettingsDialogProvider
+    [Export(typeof(IEditorConfigSettingsWindowProvider)), Shared]
+    internal class EditorConfigSettingsDialogProvider : IEditorConfigSettingsWindowProvider
     {
         private readonly EditorConfigSettingsTableProvider _tableProvider;
 
@@ -21,12 +22,12 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation.EditorConfigUI
             _tableProvider = tableProvider;
         }
 
-        public EditorConfigSettingsDialog CreateDialog()
+        public IEditorConfigSettingsWindow ShowWindow()
         {
             var tableControl = _tableProvider.CreateTableControl();
             tableControl.ShowGroupingLine = true;
             tableControl.DoColumnsAutoAdjust = true;
-            var dialog = new EditorConfigSettingsDialog(tableControl.Control);
+            var dialog = new EditorConfigSettingsWindow(tableControl.Control);
             return dialog;
         }
     }
