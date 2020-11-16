@@ -24,10 +24,11 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation.EditorConfigUI
 
         public IEditorConfigSettingsWindow ShowWindow()
         {
+            var manager = _tableProvider.TableManager;
             var tableControl = _tableProvider.CreateTableControl();
             tableControl.ShowGroupingLine = true;
             tableControl.DoColumnsAutoAdjust = true;
-            var dialog = new EditorConfigSettingsWindow(tableControl.Control);
+            var dialog = new EditorConfigSettingsWindow(tableControl.Control, manager);
             return dialog;
         }
     }

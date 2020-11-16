@@ -3,12 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -318,6 +314,8 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
 
             return stackPanel;
         }
+
+        internal ITableManager TableManager => _tableManager;
 
         internal IWpfTableControl4 CreateTableControl()
         {

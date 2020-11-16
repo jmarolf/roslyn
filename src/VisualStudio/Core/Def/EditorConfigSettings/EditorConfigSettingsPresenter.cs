@@ -102,6 +102,7 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
             var editorConfigSettingsWindow = _editorConfigSettingsWindowProvider.ShowWindow();
             editorConfigSettingsWindow.Closed += OnWindowClosed;
             editorConfigSettingsWindow.Manager.AddSource(this, EditorConfigSettingsColumnDefinitions.ColumnNames);
+            editorConfigSettingsWindow.ShowWindow();
         }
 
         private void OnWindowClosed(object sender, EventArgs e)

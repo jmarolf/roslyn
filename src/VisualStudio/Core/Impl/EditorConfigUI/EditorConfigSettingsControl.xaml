@@ -1,4 +1,4 @@
-﻿<vsplatform:DialogWindow  x:Class="Microsoft.VisualStudio.LanguageServices.Implementation.EditorConfigUI.EditorConfigSettingsWindow"
+﻿<UserControl x:Class="Microsoft.VisualStudio.LanguageServices.Implementation.EditorConfigUI.EditorConfigSettingsWindow"
         x:ClassModifier="internal"
         x:Uid="EditorConfigSettingsDialog"
         x:Name="dialog"
@@ -62,4 +62,4 @@
                 Content="{Binding Cancel, ElementName=dialog}" />
         </StackPanel>
     </Grid>
-</vsplatform:DialogWindow>
+</UserControl>

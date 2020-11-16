@@ -7,5 +7,6 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
     {
         event EventHandler Closed;
         ITableManager Manager { get; }
+        void ShowWindow();
     }
 }
