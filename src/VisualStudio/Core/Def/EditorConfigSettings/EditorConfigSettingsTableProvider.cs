@@ -322,5 +322,25 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
 
             return stackPanel;
         }
+
+        internal IWpfTableControl4 CreateTableControl()
+        {
+            return (IWpfTableControl4)_tableControlProvider.CreateControl(
+                _tableManager,
+                autoSubscribe: true,
+                BuildColumnStates(),
+                EditorConfigSettingsColumnDefinitions.ReferenceName,
+                EditorConfigSettingsColumnDefinitions.UpdateAction);
+        }
+
+        private ImmutableArray<ColumnState> BuildColumnStates()
+        {
+            return ImmutableArray.Create(
+                new ColumnState2(EditorConfigSettingsColumnDefinitions.SolutionName, isVisible: false, width: 200, sortPriority: 0, descendingSort: false, groupingPriority: 1),
+                new ColumnState2(EditorConfigSettingsColumnDefinitions.ProjectName, isVisible: false, width: 200, sortPriority: 0, descendingSort: false, groupingPriority: 2),
+                new ColumnState2(EditorConfigSettingsColumnDefinitions.ReferenceType, isVisible: false, width: 200, sortPriority: 0, descendingSort: false, groupingPriority: 3),
+                new ColumnState(EditorConfigSettingsColumnDefinitions.ReferenceName, isVisible: true, width: 0, sortPriority: 0, descendingSort: false),
+                new ColumnState(EditorConfigSettingsColumnDefinitions.UpdateAction, isVisible: true, width: 0, sortPriority: 0, descendingSort: false));
+        }
     }
 }
