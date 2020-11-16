@@ -13,17 +13,18 @@ namespace Microsoft.CodeAnalysis.Editor
     [Export(typeof(IEditorConfigSettingsBroker)), Shared]
     internal class EditorConfigSettingsBroker : IEditorConfigSettingsBroker
     {
-        private readonly IEditorConfigSettingsPresenterProvider? _editorPresenationProvider;
+        private readonly IEditorConfigSettingsPresenterProvider _editorPresenationProvider;
         private readonly IEditorConfigSettingsDataRepositoryProvider _editorConfigSettingsDataRepositoryProvider;
 
         [ImportingConstructor]
-        [Obsolete(MefConstruction.ImportingConstructorMessage, error: true)]
+        // TODO(jmarolf): update tests to consume this via MEF
+        // [Obsolete(MefConstruction.ImportingConstructorMessage, error: true)]
         public EditorConfigSettingsBroker(
-            //IEditorConfigSettingsPresenterProvider editorPresenationProvider,
+            IEditorConfigSettingsPresenterProvider editorPresenationProvider,
             IEditorConfigSettingsDataRepositoryProvider editorConfigSettingsDataRepositoryProvider
             )
         {
-            _editorPresenationProvider = null;
+            _editorPresenationProvider = editorPresenationProvider;
             _editorConfigSettingsDataRepositoryProvider = editorConfigSettingsDataRepositoryProvider;
         }
 
@@ -91,8 +92,7 @@ namespace Microsoft.CodeAnalysis.Editor
         {
             token.ThrowIfCancellationRequested();
             var dataRepository = _editorConfigSettingsDataRepositoryProvider.GetDataRepository(this, path);
-            //return _editorPresenationProvider.ShowAsync(dataRepository, token);
-            return Task.CompletedTask;
+            return _editorPresenationProvider.ShowAsync(dataRepository, token);
         }
     }
 }

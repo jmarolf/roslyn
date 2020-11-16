@@ -5,37 +5,16 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.Editor.Shared.Utilities;
-using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.VisualStudio.Shell.TableControl;
 using Microsoft.VisualStudio.Shell.TableManager;
 
 namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
 {
-    [Export(typeof(IEditorConfigSettingsPresenterProvider))]
-    internal class EditorConfigSettingsPresenterProvider : IEditorConfigSettingsPresenterProvider
-    {
-        private readonly IThreadingContext _threadingContext;
 
-        [ImportingConstructor]
-        [Obsolete(MefConstruction.ImportingConstructorMessage, error: true)]
-        public EditorConfigSettingsPresenterProvider(IThreadingContext threadingContext)
-        {
-            _threadingContext = threadingContext;
-        }
-
-        public Task ShowAsync(IEditorConfigSettingsDataSource dataRepository, CancellationToken token)
-        {
-            var presenter = new EditorConfigSettingsPresenter(_threadingContext, dataRepository, new CancellationTokenSource());
-            return presenter.ShowAsync();
-        }
-    }
-
-    [Export(typeof(IEditorConfigSettingsPresenter))]
     internal partial class EditorConfigSettingsPresenter : IEditorConfigSettingsPresenter, ITableDataSource
     {
         public string SourceTypeIdentifier => "EditorConfigSettings";
@@ -52,7 +31,6 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
         private readonly IThreadingContext _threadingContext;
         private readonly IEditorConfigSettingsDataSource _dataRepository;
 
-        [ImportingConstructor]
         public EditorConfigSettingsPresenter(IThreadingContext threadingContext,
                                              IEditorConfigSettingsDataSource dataRepository,
                                              CancellationTokenSource cancellationSource)
