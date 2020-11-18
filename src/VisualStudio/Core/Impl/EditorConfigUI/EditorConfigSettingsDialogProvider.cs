@@ -28,7 +28,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation.EditorConfigUI
             var tableControl = _tableProvider.CreateTableControl();
             tableControl.ShowGroupingLine = true;
             tableControl.DoColumnsAutoAdjust = true;
-            var dialog = new EditorConfigSettingsWindow(tableControl.Control, manager);
+            var dialog = new EditorConfigSettingsControl(tableControl.Control, manager);
             return dialog;
         }
     }

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Microsoft.VisualStudio.LanguageServices.Implementation.EditorConfigUI.EditorConfigSettingsWindow"
+﻿<UserControl x:Class="Microsoft.VisualStudio.LanguageServices.Implementation.EditorConfigUI.EditorConfigSettingsControl"
         x:ClassModifier="internal"
         x:Uid="EditorConfigSettingsDialog"
         x:Name="dialog"
@@ -12,9 +12,6 @@
         mc:Ignorable="d"
         Height="450"
         Width="600"
-        Title="{Binding RemoveUnusedReferences, ElementName=dialog}"
-        WindowStartupLocation="CenterOwner"
-        ShowInTaskbar="False"
         Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
         Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
         Resources="{StaticResource {x:Static vsshell:VsResourceKeys.ThemedDialogDefaultStylesKey}}">
