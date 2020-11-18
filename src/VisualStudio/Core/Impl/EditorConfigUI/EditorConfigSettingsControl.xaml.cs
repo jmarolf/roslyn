@@ -4,8 +4,8 @@
 
 using System;
 using System.Windows;
-using System.Windows.Controls;
 using Microsoft.CodeAnalysis.Editor.EditorConfigSettings;
+using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell.TableManager;
 
 namespace Microsoft.VisualStudio.LanguageServices.Implementation.EditorConfigUI
@@ -13,7 +13,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation.EditorConfigUI
     /// <summary>
     /// Interaction logic for EditorConfigSettingsDialog.xaml
     /// </summary>
-    internal partial class EditorConfigSettingsControl : UserControl, IEditorConfigSettingsWindow
+    internal partial class EditorConfigSettingsControl : DialogWindow, IEditorConfigSettingsWindow
     {
 
         public string RemoveUnusedReferences => "Remove Unused References";
@@ -36,8 +36,12 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation.EditorConfigUI
 
         public void ShowWindow()
         {
+            this.Show();
         }
 
-        public void Close() => Closed?.Invoke(this, new EventArgs());
+        protected override void OnClosed(EventArgs e)
+        {
+            Closed?.Invoke(this, e);
+        }
     }
 }
