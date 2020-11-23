@@ -4,9 +4,9 @@
 
 using System;
 using System.Composition;
+using System.IO.Packaging;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.CodeAnalysis.Host.Mef;
 
 namespace Microsoft.CodeAnalysis.Editor
 {
@@ -91,6 +91,7 @@ namespace Microsoft.CodeAnalysis.Editor
         private Task ShowEditorConfigSettingsAsync(string path, CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
+            // 1. Construct Data Source
             var dataRepository = _editorConfigSettingsDataRepositoryProvider.GetDataRepository(this, path);
             return _editorPresenationProvider.ShowAsync(dataRepository, token);
         }

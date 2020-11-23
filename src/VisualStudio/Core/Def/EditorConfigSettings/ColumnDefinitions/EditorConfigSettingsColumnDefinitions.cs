@@ -12,13 +12,13 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
 
         public const string TitleName = Prefix + EditorConfigSettingsTableKeyNames.TitleName;
         public const string DescriptionName = Prefix + EditorConfigSettingsTableKeyNames.DescriptionName;
-        public const string CategorynName = Prefix + EditorConfigSettingsTableKeyNames.CategoryName;
+        public const string CategoryName = Prefix + EditorConfigSettingsTableKeyNames.CategoryName;
         public const string SeverityName = Prefix + EditorConfigSettingsTableKeyNames.SeverityName;
 
         public static readonly ImmutableArray<string> ColumnNames = ImmutableArray.Create(
             TitleName,
             DescriptionName,
-            CategorynName,
+            CategoryName,
             SeverityName);
     }
 }

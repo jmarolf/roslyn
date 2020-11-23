@@ -7,13 +7,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.CodeAnalysis.CodeStyle;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.Editing;
-using Microsoft.CodeAnalysis.Formatting;
-using Microsoft.CodeAnalysis.Options;
-using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Shared.Extensions;
 
 namespace Microsoft.CodeAnalysis.Editor
@@ -51,7 +45,7 @@ namespace Microsoft.CodeAnalysis.Editor
                     .OrderBy(g => g.Key, StringComparer.CurrentCulture)
                     .Select(g =>
                     {
-                        var selectedDiagnostic = g.OrderBy(d => d).First(); // TODO(jmarolf): write customer comparer
+                        var selectedDiagnostic = g.First(); // TODO(jmarolf): write customer comparer
                         var severity = selectedDiagnostic.GetEffectiveSeverity(compilationOptions, analyzerOptions);
                         return EditorConfigSetting.Create(selectedDiagnostic, severity);
                     });

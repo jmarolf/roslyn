@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
         private bool _initialized;
         private readonly IThreadingContext _threadingContext;
         private readonly IEditorConfigSettingsWindowProvider _editorConfigSettingsWindowProvider;
-        private readonly IEditorConfigSettingsDataSource _dataRepository;
+        private readonly ITableEntriesSnapshotFactory _snapshotFactory;
 
         public EditorConfigSettingsPresenter(IThreadingContext threadingContext,
                                              IEditorConfigSettingsWindowProvider editorConfigSettingsWindowProvider,
@@ -37,7 +37,8 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
         {
             _threadingContext = threadingContext;
             _editorConfigSettingsWindowProvider = editorConfigSettingsWindowProvider;
-            _dataRepository = dataRepository;
+            dataRepository.RegisterPresenter(this);
+            _snapshotFactory = new EditorConfigSettingsSnapshotFactory(dataRepository);
             CancellationSource = cancellationSource;
         }
 
@@ -77,16 +78,6 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
                 sink.IsStable = true;
             }
         }
-
-        private string[] Columns { get; } = new[] {
-            StandardTableColumnDefinitions.DocumentName,
-            StandardTableColumnDefinitions.Line,
-            StandardTableColumnDefinitions.Column,
-            StandardTableColumnDefinitions.ProjectName,
-            StandardTableColumnDefinitions2.Definition,
-            "symbolkind",
-            "SymbolSource",
-        };
 
         public async Task ShowAsync()
         {
@@ -150,7 +141,7 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
         /// </summary>
         public IDisposable Subscribe(ITableDataSink sink)
         {
-            //sink.AddFactory(_editorConfigSettingsSnapshotFactory);
+            sink.AddFactory(_snapshotFactory);
             TableSinks.Add(sink);
             return new RemoveSinkWhenDisposed(TableSinks, sink);
         }

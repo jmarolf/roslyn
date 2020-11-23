@@ -48,7 +48,7 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
         private ImmutableArray<ColumnState> BuildColumnStates()
         {
             return ImmutableArray.Create(
-                new ColumnState(EditorConfigSettingsColumnDefinitions.CategorynName, isVisible: true, width: 0, sortPriority: 0, descendingSort: false),
+                new ColumnState(EditorConfigSettingsColumnDefinitions.CategoryName, isVisible: true, width: 0, sortPriority: 0, descendingSort: false),
                 new ColumnState(EditorConfigSettingsColumnDefinitions.TitleName, isVisible: true, width: 0, sortPriority: 0, descendingSort: false),
                 new ColumnState(EditorConfigSettingsColumnDefinitions.DescriptionName, isVisible: true, width: 0, sortPriority: 0, descendingSort: false),
                 new ColumnState(EditorConfigSettingsColumnDefinitions.SeverityName, isVisible: true, width: 0, sortPriority: 0, descendingSort: false));

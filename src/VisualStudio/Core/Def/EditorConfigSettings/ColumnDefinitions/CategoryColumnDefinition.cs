@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.Utilities;
 namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
 {
     [Export(typeof(ITableColumnDefinition))]
-    [Name(EditorConfigSettingsColumnDefinitions.CategorynName)]
+    [Name(EditorConfigSettingsColumnDefinitions.CategoryName)]
     internal class CategoryColumnDefinition : TableColumnDefinitionBase
     {
         [ImportingConstructor]
@@ -20,7 +20,7 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
         {
         }
 
-        public override string Name => EditorConfigSettingsColumnDefinitions.CategorynName;
+        public override string Name => EditorConfigSettingsColumnDefinitions.CategoryName;
         public override string DisplayName => "Category"; //TODO: Localize
     }
 }
