@@ -1,0 +1,93 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System;
+using System.ComponentModel.Composition;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using Microsoft.CodeAnalysis.Host.Mef;
+using Microsoft.VisualStudio.Imaging;
+using Microsoft.VisualStudio.Imaging.Interop;
+using Microsoft.VisualStudio.Shell.TableControl;
+using Microsoft.VisualStudio.Shell.TableManager;
+using Microsoft.VisualStudio.Utilities;
+
+namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
+{
+    [Export(typeof(ITableColumnDefinition))]
+    [Name(EditorConfigSettingsColumnDefinitions.SeverityName)]
+    internal class SeverityNameColumnDefinition : TableColumnDefinitionBase
+    {
+        [ImportingConstructor]
+        [Obsolete(MefConstruction.ImportingConstructorMessage, error: true)]
+        public SeverityNameColumnDefinition()
+        {
+        }
+
+        public override string Name => EditorConfigSettingsColumnDefinitions.SeverityName;
+        public override string DisplayName => "Severity"; //TODO: Localize
+        public override bool IsFilterable => false;
+        public override double MinWidth => 50;
+
+        public override bool TryCreateColumnContent(ITableEntryHandle entry, bool singleColumnView, out FrameworkElement content)
+        {
+            content = CreateGridElement(GetImageMoniker(entry), GetText(entry), isBold: false);
+            return true;
+        }
+
+        /// <summary>
+        /// Creates an element to display within the TableControl comprised of both an image and text string.
+        /// </summary>
+        private static FrameworkElement CreateGridElement(ImageMoniker imageMoniker, string text, bool isBold)
+        {
+            var stackPanel = new StackPanel();
+            stackPanel.Orientation = Orientation.Horizontal;
+            stackPanel.HorizontalAlignment = HorizontalAlignment.Stretch;
+
+            var block = new TextBlock();
+            block.VerticalAlignment = VerticalAlignment.Center;
+            block.Inlines.Add(new Run(text)
+            {
+                FontWeight = isBold ? FontWeights.Bold : FontWeights.Normal
+            });
+
+
+            if (!imageMoniker.IsNullImage())
+            {
+                // If we have an image and text, then create some space between them.
+                block.Margin = new Thickness(5.0, 0.0, 0.0, 0.0);
+
+                var image = new CrispImage();
+                image.VerticalAlignment = VerticalAlignment.Center;
+                image.Moniker = imageMoniker;
+                image.Width = image.Height = 16.0;
+
+                stackPanel.Children.Add(image);
+            }
+
+            // Always add the textblock last so it can follow the image.
+            stackPanel.Children.Add(block);
+
+            return stackPanel;
+        }
+
+        private ImageMoniker GetImageMoniker(ITableEntryHandle entry)
+        {
+            return entry.TryGetValue(EditorConfigSettingsTableKeyNames.DescriptionName, out string description)
+                ? description switch
+                {
+                    _ => default
+                }
+                : default;
+        }
+
+        private string GetText(ITableEntryHandle entry)
+        {
+            return entry.TryGetValue(EditorConfigSettingsTableKeyNames.TitleName, out string text)
+                ? text
+                : string.Empty;
+        }
+    }
+}

@@ -9,9 +9,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.Editor.Shared.Utilities;
+using Microsoft.VisualStudio.LanguageServices.EditorConfigSettings;
 using Microsoft.VisualStudio.Shell.TableControl;
 using Microsoft.VisualStudio.Shell.TableManager;
-using static Microsoft.VisualStudio.LanguageServices.EditorConfigSettings.EditorConfigSettingsTableProvider;
 
 namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
 {
@@ -102,7 +102,7 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
             var editorConfigSettingsWindow = _editorConfigSettingsWindowProvider.ShowWindow();
             editorConfigSettingsWindow.Closed += OnWindowClosed;
             editorConfigSettingsWindow.Manager.AddSource(this, EditorConfigSettingsColumnDefinitions.ColumnNames);
-            editorConfigSettingsWindow.ShowWindow();
+            editorConfigSettingsWindow.Show();
         }
 
         private void OnWindowClosed(object sender, EventArgs e)

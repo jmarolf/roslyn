@@ -10,8 +10,8 @@
         xmlns:vsplatform="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
         xmlns:local="clr-namespace:Microsoft.VisualStudio.LanguageServices.Implementation.EditorConfigUI"
         mc:Ignorable="d"
-        Height="450"
-        Width="600"
+        Height="650"
+        Width="900"
         Title="{Binding RemoveUnusedReferences, ElementName=dialog}"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
@@ -45,21 +45,19 @@
             HorizontalAlignment="Right"
             Orientation="Horizontal">
             <Button
-                x:Name="RemoveAllButton"
-                x:Uid="RemoveAllButton"
-                Content="{Binding RemoveAll, ElementName=dialog}" />
-            <Button
                 x:Name="ApplyButton"
                 x:Uid="ApplyButton"
                 Margin="6, 0, 0, 0"
-                Content="{Binding Apply, ElementName=dialog}" />
+                Content="{Binding Apply, ElementName=dialog}"
+                Click="ApplyButton_Click" />
             <Button
                 x:Name="CancelButton"
                 x:Uid="CancelButton"
                 IsDefault="True"
                 IsCancel="True"
                 Margin="6, 0, 0, 0"
-                Content="{Binding Cancel, ElementName=dialog}" />
+                Content="{Binding Cancel, ElementName=dialog}" 
+                Click="CancelButton_Click" />
         </StackPanel>
     </Grid>
 </vsplatform:DialogWindow>

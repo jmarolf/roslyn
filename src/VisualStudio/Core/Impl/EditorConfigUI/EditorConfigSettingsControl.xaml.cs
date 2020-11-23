@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Windows;
 using Microsoft.CodeAnalysis.Editor.EditorConfigSettings;
 using Microsoft.VisualStudio.PlatformUI;
@@ -16,8 +15,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation.EditorConfigUI
     internal partial class EditorConfigSettingsControl : DialogWindow, IEditorConfigSettingsWindow
     {
 
-        public string RemoveUnusedReferences => "Remove Unused References";
-        public string HelpText => "Choose which action you would like to perform on the unused references.";
+        public string RemoveUnusedReferences => "Editor Settings";
+        public string HelpText => "Current settings for installed Analyzers.";
         public string RemoveAll => "Remove All";
         public string Apply => "Apply";
         public string Cancel => ServicesVSResources.Cancel;
@@ -32,16 +31,11 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation.EditorConfigUI
 
         public ITableManager Manager { get; }
 
-        public event EventHandler Closed;
-
-        public void ShowWindow()
+        private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Show();
+            // TODO(jmarolf): apply changes back to editorconfig file
         }
 
-        protected override void OnClosed(EventArgs e)
-        {
-            Closed?.Invoke(this, e);
-        }
+        private void CancelButton_Click(object sender, RoutedEventArgs e) => Close();
     }
 }
