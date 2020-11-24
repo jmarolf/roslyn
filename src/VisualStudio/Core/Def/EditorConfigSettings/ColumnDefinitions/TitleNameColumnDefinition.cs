@@ -10,6 +10,8 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
 {
+
+
     [Export(typeof(ITableColumnDefinition))]
     [Name(EditorConfigSettingsColumnDefinitions.TitleName)]
     internal class TitleNameColumnDefinition : TableColumnDefinitionBase

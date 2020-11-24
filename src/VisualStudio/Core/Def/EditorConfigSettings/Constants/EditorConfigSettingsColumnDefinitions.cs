@@ -10,6 +10,8 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
     {
         private const string Prefix = "editorconfig.";
 
+        public const string EnabledName = Prefix + EditorConfigSettingsTableKeyNames.EnabledName;
+        public const string IdName = Prefix + EditorConfigSettingsTableKeyNames.IdName;
         public const string TitleName = Prefix + EditorConfigSettingsTableKeyNames.TitleName;
         public const string DescriptionName = Prefix + EditorConfigSettingsTableKeyNames.DescriptionName;
         public const string CategoryName = Prefix + EditorConfigSettingsTableKeyNames.CategoryName;

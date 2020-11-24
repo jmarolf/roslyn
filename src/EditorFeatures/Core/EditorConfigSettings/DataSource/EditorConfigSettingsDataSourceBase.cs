@@ -45,11 +45,6 @@ namespace Microsoft.CodeAnalysis.Editor
 
         public ImmutableArray<EditorConfigSetting> GetCurrentDataSnapshot()
         {
-            if (Completed)
-            {
-                throw new InvalidOperationException("The search has already ended"); // TODO(jmarolf): update string
-            }
-
             return _snapshot.ToImmutableArray();
         }
 

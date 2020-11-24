@@ -6,6 +6,8 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
 {
     internal static class EditorConfigSettingsTableKeyNames
     {
+        public const string EnabledName = "enabledname";
+        public const string IdName = "idname";
         public const string TitleName = "titlename";
         public const string DescriptionName = "descriptionname";
         public const string CategoryName = "categoryname";

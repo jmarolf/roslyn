@@ -6,8 +6,10 @@ using System;
 using System.Collections.Immutable;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.LanguageServices.EditorConfigSettings;
 using Microsoft.VisualStudio.Shell.TableControl;
+using PlatformUI = Microsoft.VisualStudio.PlatformUI;
 
 namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
 {
@@ -63,10 +65,12 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings
         {
             content = keyName switch
             {
+                EditorConfigSettingsColumnDefinitions.EnabledName => result.IsEnabled,
+                EditorConfigSettingsColumnDefinitions.IdName => result.Id,
                 EditorConfigSettingsColumnDefinitions.TitleName => result.Title,
                 EditorConfigSettingsColumnDefinitions.DescriptionName => result.Description,
-                EditorConfigSettingsColumnDefinitions.CategoryName => "Default",
-                EditorConfigSettingsColumnDefinitions.SeverityName => Enum.GetName(typeof(ReportDiagnostic), result.Severity), // TODO(jmarolf): convert to icon
+                EditorConfigSettingsColumnDefinitions.CategoryName => result.Category,
+                EditorConfigSettingsColumnDefinitions.SeverityName => result.Severity,
                 _ => "Default",
             };
 

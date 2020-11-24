@@ -7,6 +7,7 @@ using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
@@ -28,19 +29,57 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
 
         public override string Name => EditorConfigSettingsColumnDefinitions.SeverityName;
         public override string DisplayName => "Severity"; //TODO: Localize
-        public override bool IsFilterable => false;
+        public override bool IsFilterable => true;
         public override double MinWidth => 50;
 
         public override bool TryCreateColumnContent(ITableEntryHandle entry, bool singleColumnView, out FrameworkElement content)
         {
-            content = CreateGridElement(GetImageMoniker(entry), GetText(entry), isBold: false);
+            var hidden = CreateGridElement(KnownMonikers.None, "Disabled");
+            var suggestion = CreateGridElement(KnownMonikers.StatusInformation, "Suggestion");
+            var warning = CreateGridElement(KnownMonikers.StatusWarning, "Warning");
+            var error = CreateGridElement(KnownMonikers.StatusError, "Error");
+            var comboBox = new ComboBox()
+            {
+                ItemsSource = new[]
+                {
+                    hidden,
+                    suggestion,
+                    warning,
+                    error
+                }
+            };
+
+            if (entry.TryGetValue(EditorConfigSettingsColumnDefinitions.SeverityName, out DiagnosticSeverity severity))
+            {
+                switch (severity)
+                {
+                    case DiagnosticSeverity.Hidden:
+                        comboBox.SelectedItem = hidden;
+                        break;
+                    case DiagnosticSeverity.Info:
+                        comboBox.SelectedItem = suggestion;
+                        break;
+                    case DiagnosticSeverity.Warning:
+                        comboBox.SelectedItem = warning;
+                        break;
+                    case DiagnosticSeverity.Error:
+                        comboBox.SelectedItem = error;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (entry.TryGetValue(EditorConfigSettingsColumnDefinitions.EnabledName, out bool enabled))
+            {
+                comboBox.IsEnabled = enabled;
+            }
+
+            content = comboBox;
             return true;
         }
 
-        /// <summary>
-        /// Creates an element to display within the TableControl comprised of both an image and text string.
-        /// </summary>
-        private static FrameworkElement CreateGridElement(ImageMoniker imageMoniker, string text, bool isBold)
+        private static FrameworkElement CreateGridElement(ImageMoniker imageMoniker, string text)
         {
             var stackPanel = new StackPanel();
             stackPanel.Orientation = Orientation.Horizontal;
@@ -48,11 +87,7 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
 
             var block = new TextBlock();
             block.VerticalAlignment = VerticalAlignment.Center;
-            block.Inlines.Add(new Run(text)
-            {
-                FontWeight = isBold ? FontWeights.Bold : FontWeights.Normal
-            });
-
+            block.Text = text;
 
             if (!imageMoniker.IsNullImage())
             {
@@ -71,23 +106,6 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
             stackPanel.Children.Add(block);
 
             return stackPanel;
-        }
-
-        private ImageMoniker GetImageMoniker(ITableEntryHandle entry)
-        {
-            return entry.TryGetValue(EditorConfigSettingsTableKeyNames.DescriptionName, out string description)
-                ? description switch
-                {
-                    _ => default
-                }
-                : default;
-        }
-
-        private string GetText(ITableEntryHandle entry)
-        {
-            return entry.TryGetValue(EditorConfigSettingsTableKeyNames.TitleName, out string text)
-                ? text
-                : string.Empty;
         }
     }
 }

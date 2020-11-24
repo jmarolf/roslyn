@@ -11,19 +11,18 @@ using Microsoft.VisualStudio.Utilities;
 namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
 {
     [Export(typeof(ITableColumnDefinition))]
-    [Name(EditorConfigSettingsColumnDefinitions.CategoryName)]
-    internal class CategoryColumnDefinition : TableColumnDefinitionBase
+    [Name(EditorConfigSettingsColumnDefinitions.IdName)]
+    internal class IdNameColumnDefinition : TableColumnDefinitionBase
     {
         [ImportingConstructor]
         [Obsolete(MefConstruction.ImportingConstructorMessage, error: true)]
-        public CategoryColumnDefinition()
+        public IdNameColumnDefinition()
         {
         }
 
-        public override string Name => EditorConfigSettingsColumnDefinitions.CategoryName;
-        public override string DisplayName => "Category"; //TODO: Localize
-        public override bool IsFilterable => true;
-        public override double MinWidth => 200;
-
+        public override string Name => EditorConfigSettingsColumnDefinitions.IdName;
+        public override string DisplayName => "Id"; //TODO: Localize
+        public override bool IsFilterable => false;
+        public override double MinWidth => 50;
     }
 }

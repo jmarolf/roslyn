@@ -40,17 +40,22 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
                 _tableManager,
                 autoSubscribe: true,
                 BuildColumnStates(),
+                EditorConfigSettingsColumnDefinitions.EnabledName,
+                EditorConfigSettingsColumnDefinitions.IdName,
                 EditorConfigSettingsColumnDefinitions.TitleName,
                 EditorConfigSettingsColumnDefinitions.DescriptionName,
+                EditorConfigSettingsColumnDefinitions.CategoryName,
                 EditorConfigSettingsColumnDefinitions.SeverityName);
         }
 
         private ImmutableArray<ColumnState> BuildColumnStates()
         {
             return ImmutableArray.Create(
-                new ColumnState(EditorConfigSettingsColumnDefinitions.CategoryName, isVisible: true, width: 0, sortPriority: 0, descendingSort: false),
+                new ColumnState(EditorConfigSettingsColumnDefinitions.EnabledName, isVisible: true, width: 0, sortPriority: 0, descendingSort: false),
+                new ColumnState(EditorConfigSettingsColumnDefinitions.IdName, isVisible: true, width: 0, sortPriority: 0, descendingSort: true),
                 new ColumnState(EditorConfigSettingsColumnDefinitions.TitleName, isVisible: true, width: 0, sortPriority: 0, descendingSort: false),
                 new ColumnState(EditorConfigSettingsColumnDefinitions.DescriptionName, isVisible: true, width: 0, sortPriority: 0, descendingSort: false),
+                new ColumnState(EditorConfigSettingsColumnDefinitions.CategoryName, isVisible: true, width: 0, sortPriority: 0, descendingSort: false),
                 new ColumnState(EditorConfigSettingsColumnDefinitions.SeverityName, isVisible: true, width: 0, sortPriority: 0, descendingSort: false));
         }
     }
