@@ -30,11 +30,11 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
         public override string Name => EditorConfigSettingsColumnDefinitions.SeverityName;
         public override string DisplayName => "Severity"; //TODO: Localize
         public override bool IsFilterable => true;
-        public override double MinWidth => 50;
+        public override double MinWidth => 120;
 
         public override bool TryCreateColumnContent(ITableEntryHandle entry, bool singleColumnView, out FrameworkElement content)
         {
-            var hidden = CreateGridElement(KnownMonikers.None, "Disabled");
+            var refactoring = CreateGridElement(KnownMonikers.None, "Disabled");
             var suggestion = CreateGridElement(KnownMonikers.StatusInformation, "Suggestion");
             var warning = CreateGridElement(KnownMonikers.StatusWarning, "Warning");
             var error = CreateGridElement(KnownMonikers.StatusError, "Error");
@@ -42,7 +42,7 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
             {
                 ItemsSource = new[]
                 {
-                    hidden,
+                    refactoring,
                     suggestion,
                     warning,
                     error
@@ -54,7 +54,7 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
                 switch (severity)
                 {
                     case DiagnosticSeverity.Hidden:
-                        comboBox.SelectedItem = hidden;
+                        comboBox.SelectedItem = refactoring;
                         break;
                     case DiagnosticSeverity.Info:
                         comboBox.SelectedItem = suggestion;
@@ -68,11 +68,6 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
                     default:
                         break;
                 }
-            }
-
-            if (entry.TryGetValue(EditorConfigSettingsColumnDefinitions.EnabledName, out bool enabled))
-            {
-                comboBox.IsEnabled = enabled;
             }
 
             content = comboBox;

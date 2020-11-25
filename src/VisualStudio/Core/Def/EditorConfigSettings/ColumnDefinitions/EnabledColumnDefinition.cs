@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Controls;
@@ -31,15 +32,10 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
         public override bool TryCreateColumnContent(ITableEntryHandle entry, bool singleColumnView, out FrameworkElement content)
         {
             var checkBox = new CheckBox();
-            if(entry.TryGetValue(EditorConfigSettingsColumnDefinitions.EnabledName, out bool enabled))
+            if (entry.TryGetValue(EditorConfigSettingsColumnDefinitions.EnabledName, out bool enabled))
             {
                 checkBox.IsChecked = enabled;
             }
-
-            checkBox.Checked += (s, e) =>
-            {
-
-            };
 
             content = checkBox;
             return true;

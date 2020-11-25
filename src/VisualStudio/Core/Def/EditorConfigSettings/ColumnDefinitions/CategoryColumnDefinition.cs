@@ -23,7 +23,7 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
         public override string Name => EditorConfigSettingsColumnDefinitions.CategoryName;
         public override string DisplayName => "Category"; //TODO: Localize
         public override bool IsFilterable => true;
-        public override double MinWidth => 200;
+        public override double MinWidth => 80;
 
     }
 }

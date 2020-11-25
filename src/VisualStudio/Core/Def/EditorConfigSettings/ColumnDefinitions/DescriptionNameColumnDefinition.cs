@@ -24,6 +24,5 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
         public override string Name => EditorConfigSettingsColumnDefinitions.DescriptionName;
         public override string DisplayName => "Description"; //TODO: Localize
         public override bool IsFilterable => false;
-        public override double MinWidth => 200;
     }
 }
