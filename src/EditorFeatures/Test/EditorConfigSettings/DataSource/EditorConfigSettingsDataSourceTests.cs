@@ -21,12 +21,12 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.EditorConfigSettings.DataSourc
             var sync = new SemaphoreSlim(0);
             dataSource.RegisterPresenter(new TestPresenter(results =>
             {
-                AssertCorrectSeverity(results, 3, ReportDiagnostic.Error);
+                AssertCorrectSeverity(results, 3, DiagnosticSeverity.Error);
                 sync.Release();
             }));
             await sync.WaitAsync();
             var data = dataSource.GetCurrentDataSnapshot();
-            AssertCorrectSeverity(data, 3, ReportDiagnostic.Error);
+            AssertCorrectSeverity(data, 3, DiagnosticSeverity.Error);
         }
 
         [Fact]
@@ -42,25 +42,12 @@ dotnet_diagnostic.compilation.severity = none
             var sync = new SemaphoreSlim(0);
             dataSource.RegisterPresenter(new TestPresenter(results =>
             {
-                AssertCorrectSeverity(results, 3, ReportDiagnostic.Suppress);
+                AssertCorrectSeverity(results, 3, DiagnosticSeverity.Hidden);
                 sync.Release();
             }));
             await sync.WaitAsync();
             var data = dataSource.GetCurrentDataSnapshot();
-            AssertCorrectSeverity(data, 3, ReportDiagnostic.Suppress);
-        }
-
-        [Fact]
-        public void TestDocuementDataSourceCallPresenterCancelledAsync()
-        {
-            var dataSource = CreateDocuementDataSource();
-            var presenter = new TestPresenter();
-            dataSource.RegisterPresenter(presenter);
-            presenter.Cancel();
-            Assert.Throws<InvalidOperationException>(() =>
-            {
-                _ = dataSource.GetCurrentDataSnapshot();
-            });
+            AssertCorrectSeverity(data, 3, DiagnosticSeverity.Hidden);
         }
 
         [Fact]
@@ -71,7 +58,7 @@ dotnet_diagnostic.compilation.severity = none
             Assert.Equal(37, results.Length);
         }
 
-        private static void AssertCorrectSeverity(ImmutableArray<EditorConfigSetting> results, int expectedLength, ReportDiagnostic expectedReportDiagnostic)
+        private static void AssertCorrectSeverity(ImmutableArray<EditorConfigSetting> results, int expectedLength, DiagnosticSeverity expectedReportDiagnostic)
         {
             foreach (var result in results)
             {

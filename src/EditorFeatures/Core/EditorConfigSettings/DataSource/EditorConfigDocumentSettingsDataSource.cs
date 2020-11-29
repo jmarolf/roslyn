@@ -18,6 +18,8 @@ namespace Microsoft.CodeAnalysis.Editor
 
         private void BeginEditorConfigSettingsSearch(Document document, AnalyzerConfigSet analyzerConfigSet, IDiagnosticAnalyzerService diagnosticAnalyzerService)
         {
+            // TODO(jmarolf): register workspace events to clear and re-search on analyzers added/removed.
+
             Task.Run(() =>
             {
                 var compilationOptions = document.Project.CompilationOptions!;

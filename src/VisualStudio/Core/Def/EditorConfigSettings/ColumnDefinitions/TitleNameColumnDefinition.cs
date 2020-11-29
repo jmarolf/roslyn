@@ -25,6 +25,6 @@ namespace Microsoft.VisualStudio.LanguageServices.EditorConfigSettings
         public override string Name => EditorConfigSettingsColumnDefinitions.TitleName;
         public override string DisplayName => "Title"; //TODO: Localize
         public override bool IsFilterable => false;
-        public override double MinWidth => 50;
+        public override double MinWidth => 200;
     }
 }
