@@ -13,3 +13,7 @@
 "CS"="CA719A03-D55C-48F9-85DE-D934346E7F70"
 "VB"="EEC3DF0D-6D3F-4544-ABF9-8E26E6A90275"
 
+[$RootKey$\Editors\{68b46364-d378-42f2-9e72-37d86c5f4468}]
+"Package"="{13c3bbb4-f18f-4111-9f54-a0fb010d9194}"
+[$RootKey$\Editors\{68b46364-d378-42f2-9e72-37d86c5f4468}\Extensions]
+"editorconfig"=dword:00000020

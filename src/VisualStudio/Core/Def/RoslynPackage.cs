@@ -33,6 +33,7 @@ using Microsoft.VisualStudio.LanguageServices.Implementation.LanguageService;
 using Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem;
 using Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.RuleSets;
 using Microsoft.VisualStudio.LanguageServices.Implementation.ProjectTelemetry;
+using Microsoft.VisualStudio.LanguageServices.Implementation.SettingsUI;
 using Microsoft.VisualStudio.LanguageServices.Implementation.TableDataSource;
 using Microsoft.VisualStudio.LanguageServices.Implementation.TodoComments;
 using Microsoft.VisualStudio.LanguageServices.Telemetry;
@@ -135,6 +136,9 @@ namespace Microsoft.VisualStudio.LanguageServices.Setup
             _solutionEventMonitor = new SolutionEventMonitor(_workspace);
 
             TrackBulkFileOperations();
+
+            var editorConfigUIFactory = _componentModel.GetService<EditorConfigUIFactory>();
+            RegisterEditorFactory(editorConfigUIFactory);
         }
 
         private void InitializeColors()
