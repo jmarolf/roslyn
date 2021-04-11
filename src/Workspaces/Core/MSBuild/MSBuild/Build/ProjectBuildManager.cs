@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -193,13 +193,10 @@ namespace Microsoft.CodeAnalysis.MSBuild.Build
         }
 
         public Task<MSB.Execution.ProjectInstance> BuildProjectAsync(
-            MSB.Evaluation.Project project, DiagnosticLog log, CancellationToken cancellationToken)
+            MSB.Evaluation.Project project, DiagnosticLog log, ImmutableArray<string> targets, CancellationToken cancellationToken)
         {
             Debug.Assert(BatchBuildStarted);
-
-            var targets = new[] { TargetNames.Compile, TargetNames.CoreCompile };
-
-            return BuildProjectAsync(project, targets, log, cancellationToken);
+            return BuildProjectAsync(project, targets.ToArray(), log, cancellationToken);
         }
 
         private async Task<MSB.Execution.ProjectInstance> BuildProjectAsync(

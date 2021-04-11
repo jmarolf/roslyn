@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -11,11 +11,14 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.MSBuild
 {
+
+#pragma warning disable CS0419 // Ambiguous reference in cref attribute
     /// <summary>
     /// A map of projects that can be optionally used with <see cref="MSBuildProjectLoader.LoadProjectInfoAsync"/> when loading a
     /// project into a custom <see cref="Workspace"/>. To use, pass <see cref="Workspace.CurrentSolution"/> to <see cref="Create(Solution)"/>.
     /// </summary>
     public class ProjectMap
+#pragma warning restore CS0419 // Ambiguous reference in cref attribute
     {
         /// <summary>
         /// A map of project path to <see cref="ProjectId"/>s. Note that there can be multiple <see cref="ProjectId"/>s per project path
