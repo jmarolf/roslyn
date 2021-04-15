@@ -442,8 +442,6 @@ namespace Microsoft.CodeAnalysis.MSBuild
 
         protected override void ApplyProjectChanges(ProjectChanges projectChanges)
         {
-            RoslynDebug.AssertNotNull(_applyChangesProjectFile);
-
             var project = projectChanges.OldProject ?? projectChanges.NewProject;
 
             try
