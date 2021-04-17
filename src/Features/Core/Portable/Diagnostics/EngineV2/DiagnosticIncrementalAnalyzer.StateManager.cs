@@ -36,9 +36,19 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
             private readonly ConcurrentDictionary<ProjectId, ProjectAnalyzerStateSets> _projectAnalyzerStateMap;
 
             /// <summary>
+            /// Analyzers referenced by the solution.
+            /// </summary>
+            private readonly ConcurrentDictionary<SolutionId, ProjectAnalyzerStateSets> _solutionAnalyzerStateMap;
+
+            /// <summary>
             /// This will be raised whenever <see cref="StateManager"/> finds <see cref="Project.AnalyzerReferences"/> change
             /// </summary>
             public event EventHandler<ProjectAnalyzerReferenceChangedEventArgs>? ProjectAnalyzerReferenceChanged;
+
+            /// <summary>
+            /// This will be raised whenever <see cref="StateManager"/> finds <see cref="Solution.AnalyzerReferences"/> change
+            /// </summary>
+            public event EventHandler<SolutionAnalyzerReferenceChangedEventArgs>? SolutionAnalyzerReferenceChanged;
 
             public StateManager(IPersistentStorageService persistentStorageService, DiagnosticAnalyzerInfoCache analyzerInfoCache)
             {
@@ -248,6 +258,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
                 _projectAnalyzerStateMap.TryRemove(projectId, out _);
                 return removed;
             }
+
+            private void RaiseSolutionAnalyzerReferenceChanged(SolutionAnalyzerReferenceChangedEventArgs args)
+                => SolutionAnalyzerReferenceChanged?.Invoke(this, args);
 
             private void RaiseProjectAnalyzerReferenceChanged(ProjectAnalyzerReferenceChangedEventArgs args)
                 => ProjectAnalyzerReferenceChanged?.Invoke(this, args);

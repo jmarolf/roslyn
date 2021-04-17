@@ -58,6 +58,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
 
             _stateManager = new StateManager(PersistentStorageService, analyzerInfoCache);
             _stateManager.ProjectAnalyzerReferenceChanged += OnProjectAnalyzerReferenceChanged;
+            _stateManager.SolutionAnalyzerReferenceChanged += OnSolutionAnalyzerReferenceChanged
             _telemetry = new DiagnosticAnalyzerTelemetry();
 
             _diagnosticAnalyzerRunner = new InProcOrRemoteHostAnalyzerRunner(analyzerInfoCache, analyzerService.Listener);
@@ -87,6 +88,27 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
 #pragma warning disable CS0618 // Type or member is obsolete - F# is still on the older ClosedFileDiagnostic option.
                    e.Option == SolutionCrawlerOptions.ClosedFileDiagnostic;
 #pragma warning restore CS0618 // Type or member is obsolete
+        }
+
+        private void OnSolutionAnalyzerReferenceChanged(object? sender, SolutionAnalyzerReferenceChangedEventArgs e)
+        {
+            if (e.Removed.Length == 0)
+            {
+                // nothing to refresh
+                return;
+            }
+
+            // events will be automatically serialized.
+            var solution = e.Solution;
+            var stateSets = e.Removed;
+
+            // make sure we drop cache related to the analyzers
+            foreach (var stateSet in stateSets)
+            {
+                stateSet.OnRemoved();
+            }
+
+            ClearAllDiagnostics(stateSets, solution.Id);
         }
 
         private void OnProjectAnalyzerReferenceChanged(object? sender, ProjectAnalyzerReferenceChangedEventArgs e)
@@ -126,6 +148,28 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
                     {
                         stateSet.CollectDocumentsWithDiagnostics(projectId, documentSet);
                         RaiseProjectDiagnosticsRemoved(stateSet, projectId, documentSet, handleActiveFile, raiseEvents);
+                        documentSet.Clear();
+                    }
+                }
+            });
+        }
+
+        private void ClearAllDiagnostics(ImmutableArray<StateSet> stateSets, SolutionId solutionId)
+        {
+            AnalyzerService.RaiseBulkDiagnosticsUpdated(raiseEvents =>
+            {
+                using var _ = PooledHashSet<DocumentId>.GetInstance(out var documentSet);
+
+                foreach (var stateSet in stateSets)
+                {
+                    Debug.Assert(documentSet.Count == 0);
+
+                    stateSet.CollectDocumentsWithDiagnostics(solutionId, documentSet);
+
+                    // PERF: don't fire events for ones that we dont have any diagnostics on
+                    if (documentSet.Count > 0)
+                    {
+                        RaiseProjectDiagnosticsRemoved(stateSet, solutionId, documentSet, handleActiveFile: true, raiseEvents);
                         documentSet.Clear();
                     }
                 }
