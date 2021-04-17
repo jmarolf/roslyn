@@ -162,16 +162,17 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
 
                 foreach (var stateSet in stateSets)
                 {
-                    Debug.Assert(documentSet.Count == 0);
+                    // TODO(jmarolf) raise events for all projects
+                    //Debug.Assert(documentSet.Count == 0);
 
-                    stateSet.CollectDocumentsWithDiagnostics(solutionId, documentSet);
+                    //stateSet.CollectDocumentsWithDiagnostics(solutionId, documentSet);
 
-                    // PERF: don't fire events for ones that we dont have any diagnostics on
-                    if (documentSet.Count > 0)
-                    {
-                        RaiseProjectDiagnosticsRemoved(stateSet, solutionId, documentSet, handleActiveFile: true, raiseEvents);
-                        documentSet.Clear();
-                    }
+                    //// PERF: don't fire events for ones that we dont have any diagnostics on
+                    //if (documentSet.Count > 0)
+                    //{
+                    //    RaiseProjectDiagnosticsRemoved(stateSet, solutionId, documentSet, handleActiveFile: true, raiseEvents);
+                    //    documentSet.Clear();
+                    //}
                 }
             });
         }

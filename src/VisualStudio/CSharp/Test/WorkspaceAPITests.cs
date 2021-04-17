@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Diagnostics.EngineV2;
 using Microsoft.CodeAnalysis.Editor.UnitTests.Workspaces;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Host.Mef;
@@ -43,7 +44,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             workspace.WorkspaceChanged += OnWorkspaceChanged;
             var analyzerService = Assert.IsType<DiagnosticAnalyzerService>(((IMefHostExportProvider)workspace.Services.HostServices).GetExportedValue<IDiagnosticAnalyzerService>());
 
-            var incrementalAnalyzer = analyzerService.CreateIncrementalAnalyzer(workspace);
+            var incrementalAnalyzer = (DiagnosticIncrementalAnalyzer)analyzerService.CreateIncrementalAnalyzer(workspace);
 
             var analyzer1 = new TestDiagnosticAnalyzer1();
             var analyzer2 = new TestDiagnosticAnalyzer2();
