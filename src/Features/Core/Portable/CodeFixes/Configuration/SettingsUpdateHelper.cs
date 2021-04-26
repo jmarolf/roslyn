@@ -15,7 +15,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings.Updater
 {
-    internal static partial class SettingsUpdateHelper
+    internal static class SettingsUpdateHelper
     {
         private const string DiagnosticOptionPrefix = "dotnet_diagnostic.";
         private const string SeveritySuffix = ".severity";
@@ -126,6 +126,19 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings.Updater
         }
 
         /// <summary>
+        /// Updates or adds an .editorconfig <see cref="AnalyzerConfigDocument"/> to the given <paramref name="project"/>
+        /// so that the severity of the given <paramref name="diagnostic"/> is configured to be the given
+        /// <paramref name="severity"/>.
+        /// </summary>
+        public static Task<Solution> ConfigureSeverityAsync(
+            ReportDiagnostic severity,
+            Diagnostic diagnostic,
+            Project project,
+            CancellationToken cancellationToken)
+        {
+        }
+
+        /// <summary>
         /// <para>Regular expression for .editorconfig header.</para>
         /// <para>For example: "[*.cs]    # Optional comment"</para>
         /// <para>             "[*.{vb,cs}]"</para>
@@ -157,7 +170,7 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings.Updater
                                                                                                                                               Language language)
         {
             var editorConfigDirectory = PathUtilities.GetDirectoryName(filePath);
-            Assumes.NotNull(editorConfigDirectory);
+            RoslynDebug.AssertNotNull(editorConfigDirectory);
             var relativePath = PathUtilities.GetRelativePath(editorConfigDirectory.ToLowerInvariant(), filePath);
 
             TextLine? mostRecentHeader = null;

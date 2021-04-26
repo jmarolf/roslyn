@@ -24,8 +24,8 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings.Data
                 : base(description, updater)
             {
                 Category = category;
-                _trueValueDescription = trueValueDescription ?? EditorFeaturesResources.Yes;
-                _falseValueDescription = falseValueDescription ?? EditorFeaturesResources.No;
+                _trueValueDescription = trueValueDescription ?? "Yes"; // TODO: localize
+                _falseValueDescription = falseValueDescription ?? "No";
             }
 
             public override string Category { get; }
