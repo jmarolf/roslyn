@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.CodeStyle;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Editor.EditorConfigSettings.Data;
@@ -136,6 +138,70 @@ namespace Microsoft.CodeAnalysis.Editor.EditorConfigSettings.Updater
             Project project,
             CancellationToken cancellationToken)
         {
+            if (severity == ReportDiagnostic.Default)
+            {
+                severity = diagnostic.DefaultSeverity.ToReportDiagnostic();
+            }
+
+            return ConfigureSeverityAsync(severity.ToEditorConfigString(), diagnostic, project, cancellationToken);
+        }
+
+        /// <summary>
+        /// Updates or adds an .editorconfig <see cref="AnalyzerConfigDocument"/> to the given <paramref name="project"/>
+        /// so that the severity of the given <paramref name="diagnostic"/> is configured to be the given
+        /// <paramref name="editorConfigSeverity"/>.
+        /// </summary>
+        public static Task<Solution> ConfigureSeverityAsync(
+            string editorConfigSeverity,
+            Diagnostic diagnostic,
+            Project project,
+            CancellationToken cancellationToken)
+        {
+            // For option based code style diagnostic, try to find the .editorconfig key-value pair for the
+            // option setting.
+            var codeStyleOptionValues = GetCodeStyleOptionValuesForDiagnostic(diagnostic, project);
+        }
+
+        /// <summary>
+        /// Updates or adds an .editorconfig <see cref="AnalyzerConfigDocument"/> to the given <paramref name="project"/>
+        /// so that the default severity of the diagnostics with the given <paramref name="category"/> is configured to be the given
+        /// <paramref name="editorConfigSeverity"/>.
+        /// </summary>
+        public static Task<Solution> BulkConfigureSeverityAsync(
+            string editorConfigSeverity,
+            string category,
+            Project project,
+            CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Updates or adds an .editorconfig <see cref="AnalyzerConfigDocument"/> to the given <paramref name="project"/>
+        /// so that the default severity of all diagnostics is configured to be the given
+        /// <paramref name="editorConfigSeverity"/>.
+        /// </summary>
+        public static Task<Solution> BulkConfigureSeverityAsync(
+            string editorConfigSeverity,
+            Project project,
+            CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Updates or adds an .editorconfig <see cref="AnalyzerConfigDocument"/> to the given <paramref name="project"/>
+        /// so that the given <paramref name="optionName"/> is configured to have the given <paramref name="optionValue"/>.
+        /// </summary>
+        public static Task<Solution> ConfigureCodeStyleOptionAsync(
+            string optionName,
+            string optionValue,
+            Diagnostic diagnostic,
+            bool isPerLanguage,
+            Project project,
+            CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
